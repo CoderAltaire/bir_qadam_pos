@@ -2,6 +2,8 @@ class AppIcons {
   const AppIcons._();
   static const String _basePath = 'assets/images';
   static const String add = '$_basePath/add.svg';
+  static const String qr = '$_basePath/qr.svg';
+
   static const String basket = '$_basePath/basket.svg';
   static const String location = '$_basePath/location.svg';
   static const String remove = '$_basePath/remove.svg';

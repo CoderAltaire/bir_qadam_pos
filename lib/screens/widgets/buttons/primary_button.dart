@@ -20,7 +20,7 @@ class PrimaryButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: enableColor
             ? WidgetStateProperty.all(AppColors.primary)
-            : WidgetStateProperty.all(AppColors.greyF4.withOpacity(0.5)),
+            : WidgetStateProperty.all(AppColors.greyF5),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
@@ -30,10 +30,12 @@ class PrimaryButton extends StatelessWidget {
       child: !loading
           ? Text(
               label,
-              style: AppTextStyle.medium(color: AppColors.white),
+              style: AppTextStyle.medium(
+                color: enableColor ? AppColors.white : AppColors.dark,
+              ),
             )
-          : const CircularProgressIndicator(
-              color: AppColors.white,
+          : CircularProgressIndicator(
+              color: enableColor ? AppColors.white : AppColors.dark,
               strokeWidth: 1,
             ),
     );

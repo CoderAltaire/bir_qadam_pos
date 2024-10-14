@@ -22,10 +22,12 @@ class AppInputField extends StatelessWidget {
   FormFieldValidator<String>? validator;
   FocusNode? focusNode;
   TextStyle? errorStyle;
+  bool? isHidden;
 
   AppInputField({
     super.key,
     this.controller,
+    this.isHidden = false,
     this.hint,
     this.prefixIcon,
     this.suffixIcon,
@@ -41,8 +43,7 @@ class AppInputField extends StatelessWidget {
     this.fillColor,
     this.focusNode,
     this.errorStyle,
-    this.autfocus=false,
-
+    this.autfocus = false,
   });
   @override
   Widget build(BuildContext context) {
@@ -50,8 +51,9 @@ class AppInputField extends StatelessWidget {
       controller: controller,
       // enabled: enabled,
       focusNode: focusNode,
+      obscureText: isHidden ?? false,
       validator: validator,
-      autofocus: autfocus??false,
+      autofocus: autfocus ?? false,
       textInputAction: action,
       textCapitalization: capitalization,
       style: AppTextStyle.medium(size: 16),
@@ -60,6 +62,7 @@ class AppInputField extends StatelessWidget {
       readOnly: readOnly,
       onTap: onTap,
       maxLines: maxLines,
+
       decoration: InputDecoration(
           filled: filled,
           enabledBorder: OutlineInputBorder(
@@ -72,6 +75,8 @@ class AppInputField extends StatelessWidget {
           ),
           fillColor: fillColor,
           hintText: hint,
+          hintStyle: AppTextStyle.medium(size: 16),
+          prefixStyle: AppTextStyle.medium(size: 16),
           suffixIcon: suffixIcon,
           prefixIcon: prefixIcon,
           errorStyle: errorStyle),

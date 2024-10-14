@@ -129,31 +129,63 @@ class AppDialog {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('ID raqam  kiriting'),
-          content: AppInputField(
-            autfocus: true,
-            controller: orderIdController,
-            hint: 'Matn kiriting',
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.sp),
+          child: AlertDialog(
+            titlePadding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
+            actionsPadding:
+                EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r)),
+            actionsAlignment: MainAxisAlignment.spaceBetween,
+            insetPadding: EdgeInsets.zero,
+            title: Row(
+              children: [
+                Text(
+                  'ID raqam bo`yicha qidiruv',
+                  style: AppTextStyle.medium(size: 20),
+                ),
+                const Spacer(),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.close_rounded))
+              ],
+            ),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 1.w, bottom: 7.w),
+                  child: Text(
+                    "ID raqam kiritish",
+                    style:
+                        AppTextStyle.regular(size: 15, color: AppColors.greyF6),
+                  ),
+                ),
+                AppInputField(
+                  autfocus: true,
+                  controller: orderIdController,
+                  hint: 'Matn kiriting',
+                ),
+              ],
+            ),
+            actions: [
+              PrimaryButton(
+                  label: "Qidiruv",
+                  onPressed: () {
+                    // Ma'lumotni qayta ishlash uchun kerakli joyda
+                    Navigator.of(context).pop();
+                    BlocProvider.of<GetOrdersWithIdBloc>(context).add(
+                      StartGetOrdersWithIdEvent(orderIdController.text),
+                    );
+                  })
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child:const  Text('Bekor qilish'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Ma'lumotni qayta ishlash uchun kerakli joyda
-                Navigator.of(context).pop();
-                BlocProvider.of<GetOrdersWithIdBloc>(context).add(
-                  StartGetOrdersWithIdEvent(orderIdController.text),
-                );
-              },
-              child: Text('OK'),
-            ),
-          ],
         );
       },
     );

@@ -99,7 +99,7 @@ class AppFormatter {
   }
 
   static String orderStringTimeWithMonth(String example) {
-    String formatted = example.substring(0,16).replaceAll(RegExp(r'T'), ' ');
+    String formatted = example.substring(0,16).replaceAll(RegExp(r'T'), ' ').replaceAll(RegExp(r'-'), '.');
     return formatted;
   }
 

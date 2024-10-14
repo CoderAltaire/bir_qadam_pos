@@ -32,11 +32,13 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
   List<WerehouseModel> werehouses = [];
   final Box<WerehouseModel> werehouseBox = HiveBoxes.wereHouse;
   final Box<BranchModel> branchBox = HiveBoxes.branch;
+  bool _isHidden = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           BlocProvider.of<GetBranchBloc>(context).add(GetAllBranchEvent());
         },
         child: Padding(
@@ -46,6 +48,7 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
             child: BlocConsumer<OpenSessionBloc, OpenSessionState>(
               listener: (context, state) {
                 if (state is OpenSessionSuccess) {
+                
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                     builder: (context) {
                       return const HomeScreen();
@@ -310,7 +313,19 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
                       height: 51.w,
                       child: AppInputField(
                         controller: passwordController,
-                        suffixIcon: const Icon(Icons.visibility_off),
+                        keyboardType: TextInputType.number,
+                        isHidden: _isHidden,
+                        formatters: [AppValidator.codeFormatter],
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isHidden = !_isHidden;
+                            });
+                          },
+                          icon: _isHidden
+                              ? const Icon(Icons.visibility)
+                              : const Icon(Icons.visibility_off),
+                        ),
                         fillColor: AppColors.white,
                       ),
                     ),

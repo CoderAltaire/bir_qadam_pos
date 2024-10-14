@@ -43,9 +43,6 @@ class _OrdersCardWidgetState extends State<OrdersCardWidget> {
             item.add(state.item);
             totalSum = 0;
             for (var e in item) {
-              print(e.price);
-              print(e.product?.regularPrice ?? "");
-
               totalSum = totalSum + double.parse(e.price ?? "0");
             }
             item.add(state.item);
@@ -250,6 +247,11 @@ class _OrdersCardWidgetState extends State<OrdersCardWidget> {
                               timeInSecForIosWeb: 1,
                               textColor: Colors.white,
                               fontSize: 16.0);
+                        }
+                        if (state is CloseOrderSuccesState) {
+                          BlocProvider.of<GetOrdersWithIdBloc>(context).add(
+                            StartGetOrdersWithIdFinishedEvent(),
+                          );
                         }
                         // if (state is CloseOrderFailureState) {
                         //   BlocProvider.of<GetOrdersWithIdBloc>(context).add(

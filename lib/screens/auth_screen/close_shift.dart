@@ -29,6 +29,8 @@ class _ColseShiftScreenState extends State<ColseShiftScreen> {
   List<int> posdesk = [1, 2];
   List<BranchModel> branches = [];
   List<WerehouseModel> werehouses = [];
+  bool _isHidden = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -255,7 +257,6 @@ class _ColseShiftScreenState extends State<ColseShiftScreen> {
                                           ],
                                         )
                                       : Text(mainWerehouse),
-                                  
                                   const Spacer(),
                                   const Icon(Icons.keyboard_arrow_down_rounded)
                                 ],
@@ -287,6 +288,7 @@ class _ColseShiftScreenState extends State<ColseShiftScreen> {
                     child: AppInputField(
                         controller: residentalAmountControlller,
                         hint: "Summani kiriting",
+                        keyboardType: TextInputType.number,
                         fillColor: AppColors.white,
                         suffixIcon: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -304,6 +306,7 @@ class _ColseShiftScreenState extends State<ColseShiftScreen> {
                     child: AppInputField(
                         controller: finishedAmoundControlller,
                         hint: "Summani kiriting",
+                        keyboardType: TextInputType.number,
                         fillColor: AppColors.white,
                         suffixIcon: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -319,8 +322,20 @@ class _ColseShiftScreenState extends State<ColseShiftScreen> {
                   SizedBox(
                     height: 51.w,
                     child: AppInputField(
+                      isHidden: _isHidden,
+                      keyboardType: TextInputType.number,
+                      formatters: [AppValidator.codeFormatter],
                       controller: passwordControlller,
-                      suffixIcon: const Icon(Icons.visibility_off),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isHidden = !_isHidden;
+                          });
+                        },
+                        icon: _isHidden
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off),
+                      ),
                       fillColor: AppColors.white,
                     ),
                   ),

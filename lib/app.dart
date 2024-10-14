@@ -45,9 +45,7 @@ class MyApp extends StatelessWidget {
                     //   child: child ?? const SizedBox(),
                     // ),
                     // home: const LockedScreen(),
-                    home: (AppPrefs.getWereHouse != 0 &&
-                            AppPrefs.getPosDesk != 0 &&
-                            AppPrefs.getbranch != 0)
+                    home: AppPrefs.token != ""
                         ? const HomeScreen()
                         : const AuthentificationScreen(),
                   ),

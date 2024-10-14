@@ -12,18 +12,22 @@ class SixClientsAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: MaterialButton(
-        focusNode: FocusNode(skipTraversal: true),
-        color: color,
-        minWidth: 90.h,
-        height: 40.w,
-        onPressed: onPressed,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 20.sp,
+    return InkWell(
+      onTap: () => onPressed,
+      child: Padding(
+        padding: EdgeInsets.only(left: 0.sp),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.primary.withOpacity(0.07),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 15.sp),
+            child: Text(
+              "+ Qo’shish",
+              style: AppTextStyle.regular(color: AppColors.primary),
+            ),
+          ),
         ),
       ),
     );

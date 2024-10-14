@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../screens/widgets/widgets.dart';
 import '../core.dart';
 
@@ -11,8 +9,9 @@ class AppTheme {
         // primarySwatch: AppColors.primary_SWATCH,
         fontFamily: 'Inter',
         primaryColor: AppColors.primary,
-
+        scaffoldBackgroundColor: AppColors.white,
         canvasColor: AppColors.white,
+        dialogBackgroundColor: AppColors.white,
         bottomSheetTheme:
             const BottomSheetThemeData(backgroundColor: Colors.white),
         dividerTheme: const DividerThemeData(color: AppColors.greyF3),
@@ -25,7 +24,6 @@ class AppTheme {
         ),
         cardTheme: const CardTheme(color: AppColors.white),
         dialogTheme: DialogTheme(shape: AppShape.circularBorder(radius: 16)),
-
         platform: TargetPlatform.iOS,
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: AppColors.primary,
@@ -47,7 +45,7 @@ class AppTheme {
         ),
 
         radioTheme: RadioThemeData(
-          fillColor: MaterialStateProperty.all<Color>(AppColors.primary),
+          fillColor: WidgetStateProperty.all<Color>(AppColors.primary),
         ),
 
         tabBarTheme: TabBarTheme(

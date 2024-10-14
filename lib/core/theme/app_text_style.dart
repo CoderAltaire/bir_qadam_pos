@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core.dart';
-
 class AppTextStyle {
   const AppTextStyle._();
   static const String _INTER = 'Inter';

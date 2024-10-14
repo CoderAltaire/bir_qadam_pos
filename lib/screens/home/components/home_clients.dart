@@ -25,86 +25,90 @@ class _HomeClientsScreenState extends State<HomeClientsScreen> {
     return SizedBox(
       // color: Colors.blue,
       height: MediaQuery.of(context).size.height * 0.77,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.sp),
-            child: BlocBuilder<ClientBloc, ClientState>(
-              builder: (context, state) {
-                return SizedBox(
-                  height: 40.w,
-                  width: MediaQuery.of(context).size.width * 1,
-                  child: ListView(scrollDirection: Axis.horizontal, children: [
-                    Center(
-                      child: orderingProvider.getSixClient4List.length > 3
-                          ? const SizedBox(width: 0, height: 0)
-                          : SixClientsAddButton(
-                              color:
-                                  orderingProvider.getSixClient4List.isNotEmpty
-                                      ? Theme.of(context).dialogBackgroundColor
-                                      : Theme.of(context).primaryColor,
-                              onPressed: () {
-                                orderingProvider.addClient();
-                              },
-                            ),
-                    ),
-                    sixClient4List.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: sixClient4List.length,
-                            itemBuilder: (context, index) {
-                              final client = sixClient4List[index];
-                              return SixClientsButton(
-                                isSelected: selectedClientIndex == index,
-                                clientNumber: client.clientNumber,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 0.sp),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.sp),
+              child: BlocBuilder<ClientBloc, ClientState>(
+                builder: (context, state) {
+                  return SizedBox(
+                    height: 50.w,
+                    width: MediaQuery.of(context).size.width * 1,
+                    child:
+                        ListView(scrollDirection: Axis.horizontal, children: [
+                      Center(
+                        child: orderingProvider.getSixClient4List.length > 4
+                            ? const SizedBox(width: 0, height: 0)
+                            : SixClientsAddButton(
+                                color: orderingProvider
+                                        .getSixClient4List.isNotEmpty
+                                    ? AppColors.greyF3
+                                    : AppColors.primary.withOpacity(0.3),
                                 onPressed: () {
-                                  orderingProvider.selectClient(index);
+                                  orderingProvider.addClient();
                                 },
-                              );
-                            })
-                        : const SizedBox(),
-                  ]),
-                );
-              },
+                              ),
+                      ),
+                      sixClient4List.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: sixClient4List.length,
+                              itemBuilder: (context, index) {
+                                final client = sixClient4List[index];
+                                return SixClientsButton(
+                                  isSelected: selectedClientIndex == index,
+                                  clientNumber: client.clientNumber,
+                                  onPressed: () {
+                                    orderingProvider.selectClient(index);
+                                  },
+                                );
+                              })
+                          : const SizedBox(),
+                    ]),
+                  );
+                },
+              ),
             ),
-          ),
-          BlocConsumer<GetOrdersWithIdBloc, GetOrdersWithIdState>(
-            listener: (context, state) {
-              if (state is GetAllOrdersWithIdSuccess) {
-                orderModel = state.ordersesList;
-              }
-              if (state is GetAllOrdersWithIdFailure) {
-                Fluttertoast.showToast(
-                    msg: state.msg,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              }
-            },
-            builder: (context, state) {
-              if (state is GetAllOrdersWithIdSuccess) {
-                return OrdersCardWidget(oredrsModel: state.ordersesList);
-              } else if (state is GetAllOrdersWithIdProccess) {
-                return const Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: CircularProgressIndicator()),
-                    ],
-                  ),
-                );
-              } else if (state is GetAllOrderFinished) {
-                return const EmptyWidget();
-              } else {
-                return const EmptyWidget();
-              }
-            },
-          )
-        ],
+            BlocConsumer<GetOrdersWithIdBloc, GetOrdersWithIdState>(
+              listener: (context, state) {
+                if (state is GetAllOrdersWithIdSuccess) {
+                  orderModel = state.ordersesList;
+                }
+                if (state is GetAllOrdersWithIdFailure) {
+                  Fluttertoast.showToast(
+                      msg: state.msg,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }
+              },
+              builder: (context, state) {
+                if (state is GetAllOrdersWithIdSuccess) {
+                  return OrdersCardWidget(oredrsModel: state.ordersesList);
+                } else if (state is GetAllOrdersWithIdProccess) {
+                  return const Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator()),
+                      ],
+                    ),
+                  );
+                } else if (state is GetAllOrderFinished) {
+                  return const EmptyWidget();
+                } else {
+                  return const EmptyWidget();
+                }
+              },
+            )
+          ],
+        ),
       ),
     );
   }

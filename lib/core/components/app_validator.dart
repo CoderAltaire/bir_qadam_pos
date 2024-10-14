@@ -1,5 +1,7 @@
-
+import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import '../core.dart';
 
 class AppValidator {
   const AppValidator._();
@@ -42,6 +44,8 @@ class AppValidator {
     }
     return null;
   }
+  // Money formatter
+  static final inputMoneyFormatter = NumberFormat('#,###.###', 'en_US');
 
   // Phone number formatter
   static final phoneFormatter = MaskTextInputFormatter(
@@ -49,9 +53,10 @@ class AppValidator {
     filter: {"#": RegExp(r'[0-9]')},
   );
 
+
   // Code number formatter
   static final codeFormatter = MaskTextInputFormatter(
-    mask: '####',
+    mask: '########',
     filter: {"#": RegExp(r'[0-9]')},
   );
 

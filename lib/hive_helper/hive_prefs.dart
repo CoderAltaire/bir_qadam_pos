@@ -23,16 +23,7 @@ class AppPrefs {
 
   static int get counter => _box.get(PrefKeys.counter) ?? 0;
 
-  // ======================================================================= //
 
-  /// Forydalanuvchining telefon raqamini saqlash uchun
-  static Future setPhone(String phone) async {
-    await _box.put(PrefKeys.phone, phone);
-  }
-
-  static String get phone => _box.get(PrefKeys.phone) ?? '';
-
-  // ======================================================================= //
 
   static UserModel get user => _box.get(PrefKeys.user) ?? UserModel();
 
@@ -64,6 +55,16 @@ class AppPrefs {
   }
 
   static String get token => _box.get(PrefKeys.token) ?? '';
+
+  // ======================================================================= //
+   // ======================================================================= //
+
+  /// Foydalanuvchining tokenini saqlab qo'yish uchun
+  static Future setRefreshToken(String token) async {
+    await _box.put(PrefKeys.token, token);
+  }
+
+  static String get refreshToken => _box.get(PrefKeys.token) ?? '';
 
   // ======================================================================= //
 
@@ -140,7 +141,7 @@ class AppPrefs {
       await _box.put(PrefKeys.posdesk, id);
 
   //  GET POSDESK ID
-  static int get getPosDesk => _box.get(PrefKeys.posdesk)??0;
+  static int get getPosDesk => _box.get(PrefKeys.posdesk) ?? 0;
 
   // ================================================= //
 // WereHouse ID
@@ -148,16 +149,26 @@ class AppPrefs {
       await _box.put(PrefKeys.werehouse, id);
 
   //  GET WereHouse ID
-  static int get getWereHouse => _box.get(PrefKeys.werehouse)??0;
+  static int get getWereHouse => _box.get(PrefKeys.werehouse) ?? 0;
 
   // ================================================= //
 // branch ID
-  static Future setBranch(int id) async =>
-      await _box.put(PrefKeys.branch, id);
+  static Future setBranch(int id) async => await _box.put(PrefKeys.branch, id);
 
   //  GET branch ID
-  static int get getbranch => _box.get(PrefKeys.branch)??0;
+  static int get getbranch => _box.get(PrefKeys.branch) ?? 0;
 
+  
+  // ======================================================================= //
+
+  /// Forydalanuvchining telefon raqamini saqlash uchun
+  static Future setPhone(String phone) async {
+    await _box.put(PrefKeys.phone, phone);
+  }
+
+  static String get phone => _box.get(PrefKeys.phone) ?? '';
+
+  // ======================================================================= //
 
   /// PrefBox'dagi berilgan key'dagilarni o'chiradi.
   static Future clearBox() async {
@@ -169,10 +180,9 @@ class AppPrefs {
       PrefKeys.newVersion,
       PrefKeys.werehouse,
       PrefKeys.branch,
-
-    
-      PrefKeys.notification,
       PrefKeys.phone,
+
+      PrefKeys.notification,
       PrefKeys.user,
       PrefKeys.uid,
       PrefKeys.lastUpdate,
@@ -193,7 +203,6 @@ class PrefKeys {
   static const String token = 'token';
   static const String werehouse = 'werehouse';
   static const String branch = 'branch';
-
 
   static const String user = 'user';
   static const String counter = 'counter';

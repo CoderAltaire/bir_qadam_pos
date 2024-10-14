@@ -14,11 +14,10 @@ class HomeSearchPart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GetOrdersWithIdBloc, GetOrdersWithIdState>(
       builder: (context, state) {
-        return SizedBox(
-          // color: Colors.green,
-          height: MediaQuery.of(context).size.height * 0.08,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.sp),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 0.sp),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.08,
             child: Row(
               children: [
                 Expanded(
@@ -41,18 +40,18 @@ class HomeSearchPart extends StatelessWidget {
                         }
                       },
                       child: Container(
+                        height: MediaQuery.of(context).size.height * 0.06,
                         decoration:
                             AppShape.simpleContainer2(color: AppColors.greyEf),
                         child: Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(10.sp),
-                              child: const Icon(Icons.search),
-                            ),
+                                padding: EdgeInsets.all(10.sp),
+                                child: SvgPicture.asset(AppIcons.search)),
                             Text(
-                              "Maxsulot nomi",
+                              "Maxsulot nomi...",
                               style:
-                                  AppTextStyle.medium(color: AppColors.greyF4),
+                                  AppTextStyle.regular(color: AppColors.greyF4),
                             ),
                           ],
                         ),
@@ -85,15 +84,12 @@ class HomeSearchPart extends StatelessWidget {
                       }
                     },
                     child: Container(
+                      height: MediaQuery.of(context).size.height * 0.06,
                       decoration:
                           AppShape.simpleContainer2(color: AppColors.greyEf),
                       child: Padding(
-                        padding: EdgeInsets.all(10.sp),
-                        child: const Icon(
-                          Icons.qr_code_rounded,
-                          color: AppColors.greyF4,
-                        ),
-                      ),
+                          padding: EdgeInsets.all(10.sp),
+                          child: SvgPicture.asset(AppIcons.qr)),
                     ),
                   ),
                 ),

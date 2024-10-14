@@ -1,3 +1,4 @@
+import 'package:bir_qadam_pos/bloc/bloc.dart';
 import 'package:bir_qadam_pos/screens/home/components/orders_list.dart';
 import 'package:flutter/material.dart';
 
@@ -15,31 +16,66 @@ class HomeAppBar extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(height: 40.w),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                      builder: (context) {
-                        return const LockedScreen();
-                      },
-                    ), (Route<dynamic> route) => false);
-                  },
-                  child: SvgPicture.asset("assets/images/basket.svg")),
-              Text(
-                "Kassa",
-                style: AppTextStyle.semiBold(size: 18),
-              ),
-              InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const OrdersListWidget();
-                    }));
-                  },
-                  child: SvgPicture.asset("assets/images/lock.svg"))
-            ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.sp),
+            child: BlocBuilder<GetOrdersWithIdBloc, GetOrdersWithIdState>(
+              builder: (context, state) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    state is GetAllOrdersWithIdSuccess
+                        ? SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.039,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                BlocProvider.of<GetOrdersWithIdBloc>(context)
+                                    .add(
+                                  StartGetOrdersWithIdFinishedEvent(),
+                                );
+                              },
+                              icon: const Icon(Icons.arrow_back),
+                            ),
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.039,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(context,
+                                    MaterialPageRoute(
+                                  builder: (context) {
+                                    return const LockedScreen();
+                                  },
+                                ), (Route<dynamic> route) => false);
+                              },
+                              icon: SvgPicture.asset(
+                                "assets/images/basket.svg",
+                              ),
+                            ),
+                          ),
+                    Text(
+                      state is GetAllOrdersWithIdSuccess
+                          ? "ID ${state.ordersesList.id.toString()}"
+                          : "Kassa",
+                      style: AppTextStyle.semiBold(size: 18),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.039,
+                      child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return const OrdersListWidget();
+                            }));
+                          },
+                          icon: SvgPicture.asset("assets/images/lock.svg")),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 15.sp),
