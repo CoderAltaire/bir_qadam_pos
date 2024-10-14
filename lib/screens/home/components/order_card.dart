@@ -249,6 +249,16 @@ class _OrdersCardWidgetState extends State<OrdersCardWidget> {
                               fontSize: 16.0);
                         }
                         if (state is CloseOrderSuccesState) {
+<<<<<<< HEAD
+=======
+                          Fluttertoast.showToast(
+                              msg: "Order tasdiqlandi",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+>>>>>>> 52bac97dcf9e219c5d54d9ee1479a310da63014e
                           BlocProvider.of<GetOrdersWithIdBloc>(context).add(
                             StartGetOrdersWithIdFinishedEvent(),
                           );
