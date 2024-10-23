@@ -103,6 +103,11 @@ class AppFormatter {
     return formatted;
   }
 
+   static String rounderFromString(String? text) {
+    String formatted =double.parse(text??"0").round().toString();
+    return formatted;
+  }
+
   static String cardNubderFormat(String number) {
     String cardNum = number.replaceRange(6, 12, '*****');
 

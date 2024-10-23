@@ -9,20 +9,18 @@ class BarcodeBloc extends Bloc<BarcodeEvent, BarcodeState> {
   BarcodeBloc() : super(BarcodeInitial()) {
     on<GetItemByBarcodeEvent>(_getItemByBarcode);
   }
-
   FutureOr<void> _getItemByBarcode(
     GetItemByBarcodeEvent event,
     Emitter<BarcodeState> emit,
   ) async {
     emit(BarcodeLoadingState());
-    HttpResult result = await ApiService.getProductWithBarcode(event.barcode);
+    HttpResult result =
+        await ApiService.searchFromPistolProducts(event.barcode);
     if (result.isSuccess) {
-      List<ProductModel> products = (result.result['results'] as List)
-          .map((e) => ProductModel.fromJson(e))
-          .toList();
-
+      List<ProductModel> products =
+          (result.result as List).map((e) => ProductModel.fromJson(e)).toList();
       if (products.isNotEmpty) {
-        emit(BarcodeSuccessState(products.first));
+        emit(BarcodeSuccessState(products));
       } else {
         String error =
             result.statusCode == 404 ? "Maxsulot topilmadi." : result.getData();

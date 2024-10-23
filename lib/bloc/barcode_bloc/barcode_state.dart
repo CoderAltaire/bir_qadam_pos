@@ -8,7 +8,7 @@ class BarcodeInitial extends BarcodeState {}
 class BarcodeLoadingState extends BarcodeState {}
 
 class BarcodeSuccessState extends BarcodeState {
- final ProductModel products;
+ final List<ProductModel> products;
  BarcodeSuccessState(this.products);
 }
 

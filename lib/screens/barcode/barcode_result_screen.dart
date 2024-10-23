@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:bir_qadam_pos/core/core.dart';
 import 'package:bir_qadam_pos/services/barcode_scanning_service.dart';
+import 'package:provider/provider.dart';
 import '../../bloc/bloc.dart';
 import '../../models/product/product_model.dart';
+import '../../provider/ordering_provider.dart';
 import '../widgets/widgets.dart';
 
 class BarcodeResultScreen extends StatefulWidget {
@@ -27,24 +29,48 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
               Fluttertoast.showToast(msg: state.error);
               Navigator.pop(context);
             }
-            if (state is BarcodeSuccessState) {}
+            // if (state is BarcodeSuccessState) {
+            //   ItemModel item = ItemModel(
+            //     product: state.products.first,
+            //     actualPrice: state.products.first.regularPrice,
+            //     actualQuantity: state.products.first.quantityAvailable,
+            //     price: state.products.first.regularPrice,
+            //     productVariant: ProductVariant(),
+            //     quantity: "1",
+            //     currentValue: 1,
+            //   );
+            //   Provider.of<OrderingProvider>(context, listen: false).addProduct(
+            //     item: item,
+            //   );
+
+            //   BlocProvider.of<AddSearchingProductsBloc>(context)
+            //       .add(GetSearchedProductWithWord(item: item));
+            //   Navigator.pop(context);
+            // }
           },
           builder: (context, state) {
             if (state is BarcodeLoadingState) {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is BarcodeSuccessState) {
-              ProductModel product = state.products;
-
+              List<ProductModel> product = state.products;
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 400.w,
-                    child: Image.network(
-                      product.mainImage?.normal ??
-                          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dno%2Bphoto%2Bimage&psig=AOvVaw2HdF_Fsnyw2z5Inqnw7Mbf&ust=1728627126194000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCICK8v-Tg4kDFQAAAAAdAAAAABAE",
+                    child: Padding(
+                      padding: EdgeInsets.all(80.sp),
+                      child: Image.network(
+                        product.first.mainImage?.normal ?? "",
+                        errorBuilder: (context, error, stackTrace) {
+                          return SvgPicture.asset(
+                            "assets/images/lock.svg",
+                            color: AppColors.grey,
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Row(
@@ -55,8 +81,7 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
                           alignment: Alignment.centerRight,
                           child: Text(
                             "Barcode:",
-                            style: AppTextStyle.medium(
-                                color: const Color(0xff545454), size: 18),
+                            style: AppTextStyle.medium(size: 18),
                           ),
                         ),
                       ),
@@ -74,13 +99,32 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(14.w, 15.h, 14.w, 0),
-                    child: Text(
-                      product.name ?? "",
-                      style: AppTextStyle.medium(
-                          color: const Color(0xff545454), size: 18),
-                    ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(14.w, 15.h, 14.w, 0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "Nomi:",
+                            style: AppTextStyle.medium(size: 18),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(14.w, 15.h, 14.w, 0),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            product.first.name ?? "",
+                            maxLines: null,
+                            style: AppTextStyle.medium(
+                                color: const Color(0xff545454), size: 18),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   Column(
@@ -90,19 +134,25 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
                         label: "Qo`shish",
                         onPressed: () async {
                           ItemModel item = ItemModel(
-                            product: product,
-                            actualPrice: product.regularPrice,
-                            actualQuantity: "1",
-                            price: product.regularPrice,
+                            product: product.first,
+                            actualPrice: product.first.regularPrice,
+                            actualQuantity: product.first.quantityAvailable,
+                            price: product.first.regularPrice,
                             productVariant: ProductVariant(),
                             quantity: "1",
+                            currentValue: 1,
                           );
-
-                          BlocProvider.of<AddSearchingProductsBloc>(context)
-                              .add(GetSearchedProduct(item: item));
+                          Provider.of<OrderingProvider>(context, listen: false)
+                              .addProduct(
+                            item: item,
+                          );
+                          // BlocProvider.of<AddSearchingProductsBloc>(context)
+                          //     .add(GetSearchedProductWithWord(item: item));
                           if (Platform.isIOS) {
+
                             Navigator.pop(context);
-                            BarcodeScanningService.scanBarcode().then((value) {
+                            BarcodeScanningService.scanBarcode(context)
+                                .then((value) {
                               "Come Back".printf(name: "barcode result");
                             });
                           } else {

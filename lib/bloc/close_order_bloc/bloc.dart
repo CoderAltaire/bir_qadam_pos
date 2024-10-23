@@ -8,20 +8,21 @@ class CloseOrderBloc extends Bloc<CloseOrderEvent, CloseOrderState> {
   CloseOrderBloc() : super(CloseOrderInitial()) {
     on<StartCloseOrderEvent>(closeOrder);
   }
-
   Future<void> closeOrder(
     StartCloseOrderEvent event,
     Emitter<CloseOrderState> emit,
   ) async {
     emit(CloseOrderProccessState());
-    HttpResult result = await ApiService.closeOrder(event.order.toJson());
+    HttpResult result = event.isCollector == true
+        ? await ApiService.closeOrder(event.order.toCollectedJson())
+        : await ApiService.closeCheckOrder(
+            event.order.toJson(), event.collectedOrderId);
     if (result.isSuccess) {
       emit(CloseOrderSuccesState());
     } else {
       RegExp regExp = RegExp(r'\[(.*?)\]');
       Match? match = regExp.firstMatch(result.result);
       String extractedText = match != null ? match.group(1)! : 'Error !';
-
       emit(CloseOrderFailureState(extractedText));
     }
   }

@@ -16,28 +16,28 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: enableColor
-            ? WidgetStateProperty.all(AppColors.primary)
-            : WidgetStateProperty.all(AppColors.greyF5),
-        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-        )),
-      ),
-      onPressed: onPressed,
-      child: !loading
-          ? Text(
-              label,
-              style: AppTextStyle.medium(
+    return SizedBox(
+      height: 58.w,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+          backgroundColor: enableColor ? AppColors.primary : AppColors.greyF5,
+        ),
+        onPressed: onPressed,
+        child: !loading
+            ? Text(
+                label,
+                style: AppTextStyle.semiBold(
+                  size: 16,
+                  color: enableColor ? AppColors.white : AppColors.dark,
+                ),
+              )
+            : CircularProgressIndicator(
                 color: enableColor ? AppColors.white : AppColors.dark,
+                strokeWidth: 1,
               ),
-            )
-          : CircularProgressIndicator(
-              color: enableColor ? AppColors.white : AppColors.dark,
-              strokeWidth: 1,
-            ),
+      ),
     );
   }
 }

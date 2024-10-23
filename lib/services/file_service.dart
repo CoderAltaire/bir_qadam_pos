@@ -19,7 +19,6 @@ class FileService {
       ifAbsent: () => data,
     );
     String prettyJson = const JsonEncoder.withIndent(' ').convert(map);
-    // print('FileManager.setBool: $prettyJson');
     await file.writeAsString(prettyJson);
   }
 
@@ -27,7 +26,6 @@ class FileService {
     File file = await getFile();
     String fileData = await file.readAsString();
     Map<String, dynamic> map = jsonDecode(fileData);
-    // print('FileManager.getBool: $fileData');
     return map[key] ?? false;
   }
 

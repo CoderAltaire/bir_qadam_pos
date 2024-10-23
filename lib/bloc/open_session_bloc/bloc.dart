@@ -23,7 +23,9 @@ class OpenSessionBloc extends Bloc<OpenSessionEvent, OpenSessionState> {
     HttpResult result = await ApiService.openSession(phone4, event.password);
 
     if (result.isSuccess) {
+      AppPrefs.setPass(event.password);
       AppPrefs.setPhone(event.phone);
+
       AppPrefs.setToken(result.result["access"]);
       AppPrefs.setRefreshToken(result.result["refresh"]);
 

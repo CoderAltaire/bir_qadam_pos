@@ -1,11 +1,13 @@
-import 'package:bir_qadam_pos/screens/barcode/barcode_result_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:bir_qadam_pos/core/core.dart';
 import 'package:bir_qadam_pos/hive_helper/log_helper.dart';
-
 import '../../bloc/bloc.dart';
+import '../../models/product/product_model.dart';
+import '../../provider/ordering_provider.dart';
 import '../widgets/app/app_shape.dart';
+import '../widgets/dialogs/app_dialog.dart';
 
 // ignore: must_be_immutable
 class BarcodeScanPage extends StatefulWidget {
@@ -61,6 +63,81 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
               borderLength: 40.w,
               borderWidth: 3.w,
             ),
+          ),
+          BlocConsumer<BarcodeBloc, BarcodeState>(
+            listener: (context, state) {
+              if (state is BarcodeFailedState) {
+                Fluttertoast.showToast(msg: state.error);
+                Navigator.pop(context);
+              }
+              if (state is BarcodeSuccessState) {
+                ItemModel item = ItemModel();
+                if (state.products.length == 1) {
+                  if (double.parse(
+                          state.products.first.quantityAvailable ?? "0") >
+                      0) {
+                    item = ItemModel(
+                      product: state.products.first,
+                      actualPrice: state.products.first.regularPrice,
+                      actualQuantity: state.products.first.quantityAvailable,
+                      price: state.products.first.regularPrice,
+                      productVariant: ProductVariant(),
+                      quantity: "1",
+                      currentValue: 1,
+                    );
+                    Provider.of<OrderingProvider>(context, listen: false)
+                        .addProduct(
+                      item: item,
+                    );
+                    // BlocProvider.of<AddSearchingProductsBloc>(context)
+                    //     .add(GetSearchedProductWithWord(item: item));
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "Siz tanlagan afsuski yetarli emas",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  }
+                } else {
+                  AppDialog dialog = AppDialog(context);
+                  dialog.selectVariantFromPistol(state.products);
+                }
+
+               
+                // Provider.of<OrderingProvider>(context, listen: false)
+                //     .addProduct(
+                //   item: item,
+                // );
+
+                // Provider.of<OrderingProvider>(context, listen: false)
+                //     .addProduct(
+                //   item: item,
+                // );
+
+                _qrViewController?.resumeCamera();
+                Navigator.pop(context);
+              }
+            },
+            builder: (context, state) {
+              return state is BarcodeLoadingState
+                  ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Column(
+                          children: [
+                            CircularProgressIndicator(
+                              strokeWidth: 1,
+                              color: AppColors.white,
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : const SizedBox();
+            },
           ),
           Positioned(
             bottom: 100.h,
@@ -118,16 +195,17 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
       String barcode = event.code.toString();
 
       // ignore: use_build_context_synchronously
-
-      Navigator.push(
-              // ignore: use_build_context_synchronously
-              context,
-              MaterialPageRoute(builder: (context) =>  BarcodeResultScreen(barcode)))
-          .then((value) async {
-        // BlocProvider.of<AddSearchingProductsBloc>(context)
-        //     .add(GetSearchedProduct(barcode: barcode));
-        await _qrViewController?.resumeCamera();
-      });
+      BlocProvider.of<BarcodeBloc>(context).add(GetItemByBarcodeEvent(barcode));
+      // Navigator.push(
+      //         // ignore: use_build_context_synchronously
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => BarcodeResultScreen(barcode)))
+      //     .then((value) async {
+      //   // BlocProvider.of<AddSearchingProductsBloc>(context)
+      //   //     .add(GetSearchedProduct(barcode: barcode));
+      //   await _qrViewController?.resumeCamera();
+      // });
     });
   }
 

@@ -11,7 +11,7 @@ class CreatedOrderModel {
     if (json['items'] != null) {
       items = <ItemsOrderModel>[];
       json['items'].forEach((v) {
-        items!.add( ItemsOrderModel.fromJson(v));
+        items!.add(ItemsOrderModel.fromJson(v));
       });
     }
     cashDesk = json['cash_desk'];
@@ -19,14 +19,23 @@ class CreatedOrderModel {
     receivedFromCard = json['received_from_card'];
   }
 
+  Map<String, dynamic> toCollectedJson() {
+    final Map<String, dynamic> data = {};
+    if (items != null) {
+      data['items'] = items!.map((v) => v.toCollectedJson()).toList();
+    }
+    data['cash_desk'] = cashDesk;
+    data['received_cash'] = receivedCash;
+    data['received_from_card'] = receivedFromCard;
+    return data;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     if (items != null) {
       data['items'] = items!.map((v) => v.toJson()).toList();
     }
-    data['cash_desk'] = cashDesk;
-    data['received_cash'] = receivedCash;
-    data['received_from_card'] = receivedFromCard;
+
     return data;
   }
 }
@@ -44,10 +53,18 @@ class ItemsOrderModel {
     quantity = json['quantity'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCollectedJson() {
     final Map<String, dynamic> data = {};
     data['product'] = product;
     data['product_variant'] = productVariant;
+    data['quantity'] = quantity;
+    return data;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['item_id'] = product;
+    data['variant_id'] = productVariant;
     data['quantity'] = quantity;
     return data;
   }

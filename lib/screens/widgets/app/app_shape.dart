@@ -20,7 +20,7 @@ class AppShape {
         width: 1,
       ));
 
-  static simpleContainer2({double radius = 10, Color color = AppColors.dark}) =>
+  static simpleContainer2({double radius = 15, Color color = AppColors.dark}) =>
       BoxDecoration(
           borderRadius: BorderRadius.circular(radius.r),
           border: Border.all(

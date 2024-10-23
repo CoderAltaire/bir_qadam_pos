@@ -48,10 +48,11 @@ class ItemModel {
   ItemModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     product =
-        json['product'] != null ?  ProductModel.fromJson(json['product']) : null;
+        json['product'] != null ? ProductModel.fromJson(json['product']) : null;
 
-       productVariant =
-        json['product_variant'] != null ?  ProductVariant.fromJson(json['product_variant']) : null;
+    productVariant = json['product_variant'] != null
+        ? ProductVariant.fromJson(json['product_variant'])
+        : null;
     series = json['series'];
     quantity = json['quantity'];
     price = json['price'];
@@ -74,10 +75,10 @@ class ItemModel {
       data['product'] = product!.toJson();
     }
 
-      if (productVariant != null) {
+    if (productVariant != null) {
       data['product_variant'] = productVariant!.toJson();
     }
-  
+
     data['series'] = series;
     data['quantity'] = quantity;
     data['price'] = price;
@@ -122,7 +123,6 @@ class ProductVariant {
     return data;
   }
 }
-
 
 @HiveType(
     typeId: HiveTypes.productModel, adapterName: HiveAdapters.productModel)
@@ -209,57 +209,123 @@ class ProductModel extends HiveObject {
   String? limit;
   @HiveField(39)
   MainImageModel? mainImage;
- 
+  @HiveField(40)
+  String? quantityAvailable;
+  @HiveField(41)
+  ProductVariant? productVariants;
 
-  ProductModel(
-      {this.id,
-      this.name,
-      this.nameUz,
-      this.nameRu,
-      this.nameEn,
-      this.orderingNumber,
-      this.ikpu,
-      this.packageCode,
-      this.barcode,
-      this.isActive,
-      this.hasSeries,
-      this.isSet,
-      this.isSold,
-      this.isRecommended,
-      this.isPromo,
-      this.crosssellProducts,
-      this.regularPrice,
-      this.hasDiscount,
-      this.discountedPrice,
-      this.discountType,
-      this.discountPercentage,
-      this.discountStartDate,
-      this.discountEndDate,
-      this.activeTimeFrom,
-      this.activeTimeTo,
-      this.isWeight,
-      this.isPieces,
-      this.isMobileVisible,
-      this.category,
-      this.trademark,
-      this.unitTypeValue,
-      this.measureSizeValue,
-      this.measureValue,
-      this.sizeWeight,
-      this.sizeHeight,
-      this.sizeLength,
-      this.sizeWidth,
-      this.vat,
-      this.limit,
-   
-      this.mainImage});
+  ProductModel({
+    this.id,
+    this.name,
+    this.quantityAvailable,
+    this.nameUz,
+    this.nameRu,
+    this.nameEn,
+    this.orderingNumber,
+    this.ikpu,
+    this.packageCode,
+    this.barcode,
+    this.isActive,
+    this.hasSeries,
+    this.isSet,
+    this.isSold,
+    this.isRecommended,
+    this.isPromo,
+    this.crosssellProducts,
+    this.regularPrice,
+    this.hasDiscount,
+    this.discountedPrice,
+    this.discountType,
+    this.discountPercentage,
+    this.discountStartDate,
+    this.discountEndDate,
+    this.activeTimeFrom,
+    this.activeTimeTo,
+    this.isWeight,
+    this.isPieces,
+    this.isMobileVisible,
+    this.category,
+    this.trademark,
+    this.unitTypeValue,
+    this.measureSizeValue,
+    this.measureValue,
+    this.sizeWeight,
+    this.sizeHeight,
+    this.sizeLength,
+    this.sizeWidth,
+    this.vat,
+    this.limit,
+    this.productVariants,
+    this.mainImage,
+  });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     nameUz = json['name_uz'];
-    nameRu = json['name_ru'];
+    quantityAvailable = json['quantity_available'].toString();
     nameEn = json['name_en'];
+    orderingNumber = json['ordering_number'];
+    ikpu = json['ikpu'];
+    packageCode = json['package_code'];
+    barcode = json['barcode'];
+    isActive = json['is_active'];
+    hasSeries = json['has_series'];
+    isSet = json['is_set'];
+    isSold = json['is_sold'];
+    isRecommended = json['is_recommended'];
+    isPromo = json['is_promo'];
+    if (json['crosssell_products'] != null) {
+      crosssellProducts = <String>[];
+      json['crosssell_products'].forEach((v) {
+        crosssellProducts!.add(v);
+      });
+    }
+    regularPrice = json['regular_price'].toString();
+    hasDiscount = json['has_discount'];
+    discountedPrice = json['discounted_price'];
+    discountType = json['discount_type'];
+    discountPercentage = json['discount_percentage'];
+    discountStartDate = json['discount_start_date'];
+    discountEndDate = json['discount_end_date'];
+    activeTimeFrom = json['active_time_from'];
+    activeTimeTo = json['active_time_to'];
+    isWeight = json['is_weight'];
+    isPieces = json['is_pieces'];
+    isMobileVisible = json['is_mobile_visible'];
+    category = json['category'] != null
+        ? CategoryModel.fromJson(json['category'])
+        : null;
+    trademark = json['trademark'];
+    unitTypeValue = json['unit_type_value'];
+    measureSizeValue = json['measure_size_value'];
+    measureValue = json['measure_value'];
+    sizeWeight = json['size_weight'];
+    sizeHeight = json['size_height'];
+    sizeLength = json['size_length'];
+    sizeWidth = json['size_width'];
+
+    productVariants = json['product_variant'] != null
+        ? ProductVariant.fromJson(json['product_variant'])
+        : null;
+
+    vat = json['vat'];
+    limit = json['limit'];
+    mainImage = json['main_image'] != null || json['image'] != null
+        ? MainImageModel.fromJson(json['main_image'] ?? json['image'])
+        : null;
+  }
+
+  ProductModel.fromSearchedJson(Map<String, dynamic> json) {
+    id = json['product_id'];
+    name = json["product_name"];
+
+    productVariants = json['product_variant'] != null
+        ? ProductVariant.fromJson(json['product_variant'])
+        : null;
+    nameUz = json['product_name_uz'];
+    quantityAvailable = json['quantity_available'];
+    nameEn = json['product_name_en'];
     orderingNumber = json['ordering_number'];
     ikpu = json['ikpu'];
     packageCode = json['package_code'];
@@ -301,8 +367,8 @@ class ProductModel extends HiveObject {
     sizeWidth = json['size_width'];
     vat = json['vat'];
     limit = json['limit'];
-    mainImage = json['main_image'] != null
-        ? MainImageModel.fromJson(json['main_image'])
+    mainImage = json['main_image'] != null || json['image'] != null
+        ? MainImageModel.fromJson(json['main_image'] ?? json['image'])
         : null;
   }
 
@@ -311,6 +377,7 @@ class ProductModel extends HiveObject {
     data['id'] = id;
     data['name'] = name;
     data['name_uz'] = nameUz;
+    data['quantity_available'] = quantityAvailable;
     data['name_ru'] = nameRu;
     data['name_en'] = nameEn;
     data['ordering_number'] = orderingNumber;

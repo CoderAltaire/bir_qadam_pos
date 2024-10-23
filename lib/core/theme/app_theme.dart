@@ -10,6 +10,7 @@ class AppTheme {
         fontFamily: 'Inter',
         primaryColor: AppColors.primary,
         scaffoldBackgroundColor: AppColors.white,
+      
         canvasColor: AppColors.white,
         dialogBackgroundColor: AppColors.white,
         bottomSheetTheme:

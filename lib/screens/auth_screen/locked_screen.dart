@@ -14,7 +14,6 @@ class LockedScreen extends StatefulWidget {
 }
 
 class _LockedScreenState extends State<LockedScreen> {
-  List<String> types = ["first location", " second location", "thisd location"];
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool _isHidden = true;
@@ -23,155 +22,189 @@ class _LockedScreenState extends State<LockedScreen> {
     phoneController.text = AppPrefs.phone;
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.sp),
-              child: Center(
-                  child: Text(
-                "Tizimga kirish",
-                style: AppTextStyle.semiBold(size: 18),
-              )),
-            ),
-            Container(color: AppColors.dark.withOpacity(0.3), height: 1),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18.sp),
-              child: SingleChildScrollView(
-                // physics: const NeverScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.88,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Spacer(),
-                      Center(
-                        child: SizedBox(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.sp),
+                child: Center(
+                    child: Text(
+                  "Tizimga kirish",
+                  style: AppTextStyle.semiBold(size: 16),
+                )),
+              ),
+              Container(color: AppColors.dark.withOpacity(0.3), height: 1),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.sp),
+                child: SingleChildScrollView(
+                  // physics: const NeverScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.88,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Spacer(),
+                        Center(
+                          child: SizedBox(
                             height: 200.w,
-                            child: Image.asset("assets/images/avatar.png")),
-                      ),
-                      // SizedBox(height: 50.w),
-                      Center(
-                          child: Text(
-                        "Iltimos tizimga kiring",
-                        style: AppTextStyle.semiBold(size: 18),
-                      )),
-                      Padding(
-                        padding: EdgeInsets.only(top: 22.w, bottom: 7.w),
-                        child: const Text("Telefon raqam"),
-                      ),
-                      SizedBox(
-                        height: 51.w,
-                        child: AppInputField(
-                          keyboardType: TextInputType.number,
-                          hint: "",
-                          controller: phoneController,
-                          fillColor: AppColors.white,
-                          formatters: [AppValidator.phoneFormatter],
-                          prefixIcon: Container(
-                            width: 70.w,
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 10.h),
-                              child: Text(
-                                '+998',
-                                style: AppTextStyle.medium(),
-                              ),
+                            child: Image.asset(
+                              "assets/images/avatar.png",
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 22.w, bottom: 7.w),
-                        child: const Text("Parol"),
-                      ),
-                      SizedBox(
-                        height: 51.w,
-                        child: AppInputField(
-                          isHidden: _isHidden,
-                          keyboardType: TextInputType.number,
-                          formatters: [AppValidator.codeFormatter],
-                          controller: passwordController,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isHidden = !_isHidden;
-                              });
-                            },
-                            icon: _isHidden
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off),
+                        // SizedBox(height: 50.w),
+                        Center(
+                            child: Text(
+                          "Iltimos, tizimga kiring",
+                          style: AppTextStyle.medium(size: 18),
+                        )),
+                        Padding(
+                          padding: EdgeInsets.only(top: 22.w, bottom: 7.w),
+                          child: Text(
+                            "Telefon raqam",
+                            style:
+                                AppTextStyle.regular(color: AppColors.greyF6),
                           ),
-                          fillColor: AppColors.white,
                         ),
-                      ),
-                      const Spacer(),
-                      SizedBox(height: 50.w),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: PrimaryButton(
-                            label: "Seans yakunlash",
-                            enableColor: false,
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return const ColseShiftScreen();
-                                },
-                              ));
-                            },
-                          )),
-                          SizedBox(
-                            width: 20.h,
+                        SizedBox(
+                          height: 51.w,
+                          child: SizedBox(
+                            height: 51.w,
+                            child: AppInputField(
+                                controller: phoneController,
+                                formatters: [AppValidator.phoneFormatter],
+                                keyboardType: TextInputType.number,
+                                enableBorderColor: AppColors.greyEf,
+                                style: AppTextStyle.regular(),
+                                prefixIcon: Container(
+                                  width: 70.w,
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10.h),
+                                    child: Text(
+                                      ' +998',
+                                      style: AppTextStyle.regular(),
+                                    ),
+                                  ),
+                                ),
+                                hint: "",
+                                fillColor: AppColors.white),
                           ),
-                          Expanded(
-                            child: BlocConsumer<CloseSessionBloc,
-                                CloseSessionState>(
-                              listener: (context, state) {
-                                if (state is LoginSessionSuccess) {
-                                  Navigator.pushAndRemoveUntil(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return const HomeScreen();
-                                  }), (Route<dynamic> route) => false);
-                                }
-
-                                if (state is CloseSessionFailure) {
-                                  Fluttertoast.showToast(
-                                      msg: "Error Closing Session !s",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                }
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 22.w, bottom: 7.w),
+                          child: Text(
+                            "Parol",
+                            style:
+                                AppTextStyle.regular(color: AppColors.greyF6),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 51.w,
+                          child: AppInputField(
+                            isHidden: _isHidden,
+                            enableBorderColor: AppColors.greyEf,
+                            keyboardType: TextInputType.number,
+                            formatters: [AppValidator.codeFormatter],
+                            controller: passwordController,
+                            style: AppTextStyle.regular(),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isHidden = !_isHidden;
+                                });
                               },
-                              builder: (context, state) {
-                                return PrimaryButton(
-                                  label: "Kirish",
-                                  onPressed: () {
+                              icon: _isHidden
+                                  ? const Icon(Icons.visibility_off)
+                                  : const Icon(Icons.visibility),
+                            ),
+                            fillColor: AppColors.white,
+                          ),
+                        ),
+
+                        const Spacer(),
+                        SizedBox(height: 50.w),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: PrimaryButton(
+                              label: "Seans yakunlash",
+                              enableColor: false,
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return ColseShiftScreen(
+                                      password: passwordController.text,
+                                      phone: phoneController.text,
+                                      branchName: 'Filialni tanlang',
+                                      branches: const [],
+                                      posdesk: "Kassani tanlang",
+                                      wereHouse: const [],
+                                      werehouseName: 'Omborni tanlang',
+                                    );
+                                  },
+                                ));
+                              },
+                            )),
+                            SizedBox(
+                              width: 20.h,
+                            ),
+                            Expanded(
+                              child: BlocConsumer<CloseSessionBloc,
+                                  CloseSessionState>(
+                                listener: (context, state) {
+                                  if (state is LoginSessionSuccess) {
                                     Navigator.pushAndRemoveUntil(context,
                                         MaterialPageRoute(builder: (context) {
                                       return const HomeScreen();
                                     }), (Route<dynamic> route) => false);
+                                  }
 
-                                    // BlocProvider.of<OpenSessionBloc>(context)
-                                    //     .add(StartLoginSessionEvent(
-                                    //   phoneController.text,
-                                    //   passwordController.text,
-                                    // ));
-                                  },
-                                );
-                              },
+                                  if (state is CloseSessionFailure) {
+                                    Fluttertoast.showToast(
+                                        msg: "Error Closing Session !s",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                },
+                                builder: (context, state) {
+                                  return PrimaryButton(
+                                    label: "Kirish",
+                                    onPressed: () {
+                                      if (AppPrefs.password ==
+                                          passwordController.text) {
+                                        Navigator.pushAndRemoveUntil(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const HomeScreen();
+                                        }), (Route<dynamic> route) => false);
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: "Parol noto`gri !",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 22.w),
-                    ],
+                          ],
+                        ),
+                        SizedBox(height: 22.w),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

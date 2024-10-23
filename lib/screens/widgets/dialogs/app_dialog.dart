@@ -2,8 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bir_qadam_pos/core/core.dart';
+import 'package:provider/provider.dart';
 import '../../../bloc/bloc.dart';
+import '../../../bloc/searching/bloc.dart';
+import '../../../models/product/product_model.dart';
+import '../../../provider/ordering_provider.dart';
 import '../../../translations/translations.dart';
+import '../../home/components/products_search/product_search_item.dart';
 import '../widgets.dart';
 
 class AppDialog {
@@ -122,6 +127,79 @@ class AppDialog {
         });
   }
 
+  searchDialog({
+    VoidCallback? onYesPressed,
+  }) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return BlocConsumer<SearchingBloc, SearchingState>(
+            listener: (context, state) {
+              if (state is SearchSucces) {
+                state.products;
+              }
+            },
+            builder: (context, state) {
+              if (state is SearchProccess) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        border: Border.all(color: AppColors.greyEf),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 30,
+                            width: 30,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else if (state is SearchSucces) {
+                return Padding(
+                    padding:
+                        EdgeInsets.only(top: 60, left: 15.sp, right: 70.sp),
+                    child: Container(
+                      height: state.products.length > 5
+                          ? 350.w
+                          : state.products.length * 70.w,
+                      width: 400,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        border: Border.all(color: AppColors.greyEf),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: state.products.length,
+                        itemBuilder: (context, index) {
+                          ProductModel product = state.products[index];
+                          return ProductSearchItem(
+                            product: product,
+                            query: state.query,
+                          );
+                        },
+                      ),
+                    ));
+              } else {
+                return const SizedBox();
+              }
+            },
+          );
+        });
+  }
+
   TextEditingController orderIdController = TextEditingController();
 
   /// show barcode
@@ -145,13 +223,14 @@ class AppDialog {
               children: [
                 Text(
                   'ID raqam bo`yicha qidiruv',
-                  style: AppTextStyle.medium(size: 20),
+                  style: AppTextStyle.medium(size: 18),
                 ),
                 const Spacer(),
                 IconButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
+                    color: AppColors.greyF4,
                     icon: const Icon(Icons.close_rounded))
               ],
             ),
@@ -162,13 +241,15 @@ class AppDialog {
                 Padding(
                   padding: EdgeInsets.only(top: 1.w, bottom: 7.w),
                   child: Text(
-                    "ID raqam kiritish",
+                    "ID raqam kiriting",
                     style:
-                        AppTextStyle.regular(size: 15, color: AppColors.greyF6),
+                        AppTextStyle.regular(size: 14, color: AppColors.greyF6),
                   ),
                 ),
                 AppInputField(
                   autfocus: true,
+                  style: AppTextStyle.regular(size: 16),
+                  hintStyle: AppTextStyle.regular(size: 16),
                   controller: orderIdController,
                   hint: 'Matn kiriting',
                 ),
@@ -185,6 +266,262 @@ class AppDialog {
                     );
                   })
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// show barcode
+  void showOrderSucces() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.sp),
+          child: AlertDialog(
+            titlePadding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
+            actionsPadding:
+                EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r)),
+            actionsAlignment: MainAxisAlignment.spaceBetween,
+            insetPadding: EdgeInsets.zero,
+            title: Row(
+              children: [
+                Text(
+                  'Tasdiqlandi',
+                  style: AppTextStyle.medium(size: 18),
+                ),
+                const Spacer(),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    color: AppColors.greyF4,
+                    icon: const Icon(Icons.close_rounded))
+              ],
+            ),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 1.w, bottom: 7.w),
+                  child: Text(
+                    "Order muvaffaqiyatli tasdiqlandi.",
+                    style:
+                        AppTextStyle.regular(size: 16, color: AppColors.greyF6),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              PrimaryButton(
+                  label: "OK",
+                  onPressed: () {
+                    Provider.of<OrderingProvider>(context, listen: false)
+                        .cancelOrdering();
+                    Navigator.of(context).pop();
+                  })
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // ///Select Product Variant
+  // void selectProductVariant(ProductModel _product) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 30.sp),
+  //         child: Container(
+  //           height: MediaQuery.of(context).size.height * 0.5,
+  //           child: AlertDialog(
+  //             titlePadding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
+  //             actionsPadding:
+  //                 EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+  //             contentPadding:
+  //                 EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+  //             shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(12.r)),
+  //             actionsAlignment: MainAxisAlignment.spaceBetween,
+  //             insetPadding: EdgeInsets.zero,
+  //             title: Row(
+  //               children: [
+  //                 Text(
+  //                   'Maxsulotning turini tanlang',
+  //                   style: AppTextStyle.medium(size: 18),
+  //                 ),
+  //                 const Spacer(),
+  //                 IconButton(
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                     },
+  //                     color: AppColors.greyF4,
+  //                     icon: const Icon(Icons.close_rounded))
+  //               ],
+  //             ),
+  //             content: SizedBox(
+  //               child: SingleChildScrollView(
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                   children: [
+  //                     ...(_product ).map((e) {
+  //                       return Padding(
+  //                         padding: EdgeInsets.symmetric(vertical: 5.sp),
+  //                         child: InkWell(
+  //                           onTap: () {
+  //                             ItemModel item = ItemModel(
+  //                               product: e,
+  //                               actualPrice: e.regularPrice,
+  //                               actualQuantity: e.quantityAvailable,
+  //                               price: e.regularPrice,
+  //                               productVariant: ProductVariant(),
+  //                               quantity: "1",
+  //                               currentValue: 1,
+  //                             );
+  //                             Provider.of<OrderingProvider>(context,
+  //                                     listen: false)
+  //                                 .addProduct(
+  //                               item: item,
+  //                             );
+  //                             // BlocProvider.of<AddSearchingProductsBloc>(context)
+  //                             //     .add(GetSearchedProductWithWord(item: item));
+  //                             Navigator.pop(context);
+  //                           },
+  //                           child: Container(
+  //                             decoration: BoxDecoration(
+  //                               borderRadius: BorderRadius.circular(12.r),
+  //                               border: Border.all(color: AppColors.greyEf),
+  //                             ),
+  //                             child: Padding(
+  //                               padding: EdgeInsets.symmetric(
+  //                                   horizontal: 10.sp, vertical: 12.sp),
+  //                               child: Text(
+  //                                 e.name ?? "",
+  //                                 style: AppTextStyle.regular(size: 16),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     }),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             actions: [],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  ///Select Product From Pistol Variant
+  void selectVariantFromPistol(List<ProductModel> _product) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.sp),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: AlertDialog(
+              titlePadding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
+              actionsPadding:
+                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r)),
+              actionsAlignment: MainAxisAlignment.spaceBetween,
+              insetPadding: EdgeInsets.zero,
+              title: Row(
+                children: [
+                  Text(
+                    'Maxsulotning turini tanlang',
+                    style: AppTextStyle.medium(size: 18),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: AppColors.greyF4,
+                      icon: const Icon(Icons.close_rounded))
+                ],
+              ),
+              content: SizedBox(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ..._product.map((e) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.sp),
+                          child: InkWell(
+                            onTap: () {
+                              ItemModel item = ItemModel(
+                                product: e,
+                                actualPrice: e.regularPrice,
+                                actualQuantity: e.quantityAvailable,
+                                price: e.regularPrice,
+                                productVariant: ProductVariant(),
+                                quantity: "1",
+                                currentValue: 1,
+                              );
+                              Provider.of<OrderingProvider>(context,
+                                      listen: false)
+                                  .addProduct(
+                                item: item,
+                              );
+                              // BlocProvider.of<AddSearchingProductsBloc>(context)
+                              //     .add(GetSearchedProductWithWord(item: item));
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.r),
+                                border: Border.all(color: AppColors.greyEf),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10.sp, vertical: 12.sp),
+                                child: Text(
+                                  e.name ?? "",
+                                  style: AppTextStyle.regular(size: 16),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.stretch,
+                //   children: [
+                //     PrimaryButton(
+                //         label: "OK",
+                //         onPressed: () {
+                //           Provider.of<OrderingProvider>(context, listen: false)
+                //               .cancelOrdering();
+                //           Navigator.of(context).pop();
+                //         }),
+                //   ],
+                // )
+              ],
+            ),
           ),
         );
       },

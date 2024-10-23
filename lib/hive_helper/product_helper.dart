@@ -1,4 +1,3 @@
-
 import '../models/product/product_model.dart';
 import '../services/services.dart';
 
@@ -11,10 +10,8 @@ class ProductHelper {
   //   for (var product in products) {
   //     entries[product.key] = product;
   //   }
-
   //   await _box.putAll(entries);
   // }
-
   // static ProductModel? getProductByBarcode(String barcode) {
   //   ProductModel? prod;
   //   for (var product in _box.values) {
@@ -48,7 +45,7 @@ class ProductHelper {
     query = query.trim().toLowerCase();
     HttpResult result = await ApiService.searchProducts(query);
     List<ProductModel> producs = (result.result['results'] as List)
-        .map((e) => ProductModel.fromJson(e))
+        .map((e) => ProductModel.fromSearchedJson(e))
         .toList();
     return producs;
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../bloc/bloc.dart';
 import '../../../core/core.dart';
 import '../../../services/services.dart';
@@ -23,21 +22,12 @@ class HomeSearchPart extends StatelessWidget {
                 Expanded(
                     flex: 100,
                     child: InkWell(
+                      borderRadius: BorderRadius.circular(15.r),
                       onTap: () {
-                        if (state is GetAllOrdersWithIdSuccess) {
-                          showSearch(
-                            context: context,
-                            delegate: ProductSearchDelegate(),
-                          );
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: "Kerakli orderni tanlang",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }
+                        showSearch(
+                          context: context,
+                          delegate: ProductSearchDelegate(),
+                        );
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.06,
@@ -57,30 +47,20 @@ class HomeSearchPart extends StatelessWidget {
                         ),
                       ),
                     )),
-                SizedBox(
-                  width: 14.h,
-                ),
+                SizedBox(width: 14.h),
                 Expanded(
                   flex: 15,
                   child: InkWell(
                     onTap: () {
-                      if (state is GetAllOrdersWithIdSuccess) {
-                        if (Platform.isIOS) {
-                          BarcodeScanningService.scanBarcode();
-                        } else {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return const BarcodeScanPage();
-                          }));
-                        }
+                      if (Platform.isIOS) {
+                        BarcodeScanningService.scanBarcode(context);
                       } else {
-                        Fluttertoast.showToast(
-                            msg: "Kerakli orderni tanlang",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                        // BarcodeScanningService.scanBarcode(context);
+
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const BarcodeScanPage();
+                        }));
                       }
                     },
                     child: Container(

@@ -27,11 +27,12 @@ class _EmptyWidgetState extends State<EmptyWidget> {
               Padding(
                 padding:  EdgeInsets.symmetric(vertical: 15.sp),
                 child: Text(
-                  "Xozircha hech nima yo`q !",
+                  "Xozircha bu yer bo’sh!",
                   style: AppTextStyle.medium(size: 17),
                 ),
               ),
-              Center(
+              Padding(
+                padding:  EdgeInsets.only(bottom: 60.sp,left: 18.sp,right: 18.sp),
                 child: Text(
                   "Buyurtmani qabul qilish yaqin bo’lgan manzillarni qo’shib oling",
                   textAlign: TextAlign.center,

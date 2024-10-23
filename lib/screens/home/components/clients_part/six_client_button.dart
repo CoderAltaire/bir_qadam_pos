@@ -16,22 +16,25 @@ class SixClientsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 15.sp),
-      child: ClipRRect(
+      padding: EdgeInsets.only(left: 12.sp),
+      child: InkWell(
         borderRadius: BorderRadius.circular(10.r),
-        child: MaterialButton(
-          focusNode: FocusNode(skipTraversal: true),
-          elevation: 0,
-          color: isSelected
-              ?AppColors.pinButtonColor
-              :AppColors.greyF3,
-          minWidth: 40.h,
-          height: 30.w,
-          onPressed: onPressed,
-          child: Text(
-            'Client $clientNumber',
-            style: AppTextStyle.medium(
-                color: isSelected? AppColors.white : AppColors.greyF4),
+        onTap: onPressed,
+        child: Container(
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.primary
+                : AppColors.greyF7,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 15.sp),
+            child: Text(
+              "Savdo $clientNumber",
+              style: AppTextStyle.regular(
+                color: isSelected ? AppColors.white : AppColors.greyF6,
+              ),
+            ),
           ),
         ),
       ),

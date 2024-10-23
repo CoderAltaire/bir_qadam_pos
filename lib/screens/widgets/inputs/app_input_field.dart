@@ -19,20 +19,27 @@ class AppInputField extends StatelessWidget {
   bool? filled;
   bool? autfocus;
   Color? fillColor;
+  TextStyle? hintStyle;
   FormFieldValidator<String>? validator;
   FocusNode? focusNode;
   TextStyle? errorStyle;
+  TextStyle? style;
+  Color? enableBorderColor;
   bool? isHidden;
-
+  VoidCallback? onEnding;
   AppInputField({
     super.key,
+    this.onEnding,
     this.controller,
     this.isHidden = false,
     this.hint,
+    this.enableBorderColor,
+    this.style,
     this.prefixIcon,
     this.suffixIcon,
     this.formatters,
     this.keyboardType,
+    this.hintStyle,
     this.readOnly = false,
     this.action = TextInputAction.next,
     this.capitalization = TextCapitalization.words,
@@ -51,12 +58,13 @@ class AppInputField extends StatelessWidget {
       controller: controller,
       // enabled: enabled,
       focusNode: focusNode,
+      onEditingComplete: onEnding,
       obscureText: isHidden ?? false,
       validator: validator,
       autofocus: autfocus ?? false,
       textInputAction: action,
       textCapitalization: capitalization,
-      style: AppTextStyle.medium(size: 16),
+      style: style ?? AppTextStyle.medium(size: 16),
       inputFormatters: formatters,
       keyboardType: keyboardType,
       readOnly: readOnly,
@@ -67,7 +75,8 @@ class AppInputField extends StatelessWidget {
           filled: filled,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.r),
-            borderSide: const BorderSide(color: AppColors.dark, width: 1.0),
+            borderSide: BorderSide(
+                color: enableBorderColor ?? AppColors.dark, width: 1.0),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.r),
@@ -75,7 +84,7 @@ class AppInputField extends StatelessWidget {
           ),
           fillColor: fillColor,
           hintText: hint,
-          hintStyle: AppTextStyle.medium(size: 16),
+          hintStyle: hintStyle ?? AppTextStyle.medium(size: 16),
           prefixStyle: AppTextStyle.medium(size: 16),
           suffixIcon: suffixIcon,
           prefixIcon: prefixIcon,
@@ -83,3 +92,6 @@ class AppInputField extends StatelessWidget {
     );
   }
 }
+
+
+

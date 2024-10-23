@@ -11,16 +11,20 @@ class ApiService {
   static const String _baseUrl = "https://api.bir-qadam.thinkland.uz/api";
   static Map<String, String> _headers() {
     String token = AppPrefs.token;
-    if (token.isEmpty)
-      return {
-        "Content-Type": "application/json",
-        "Authorization": 'Basic Kzk5ODIwMTIzNDU2NzoxMjM0NTY3OA=='
-      };
-
     return {
       "Content-Type": "application/json",
-      // "Authorization": "Bearer $token"
+      "Authorization": 'Basic Kzk5ODIwMTIzNDU2NzoxMjM0NTY3OA=='
     };
+    // if (token.isEmpty)
+    //   return {
+    //     "Content-Type": "application/json",
+    //     "Authorization": 'Basic Kzk5ODIwMTIzNDU2NzoxMjM0NTY3OA=='
+    //   };
+
+    // return {
+    //   "Content-Type": "application/json",
+    //   // "Authorization": "Bearer $token"
+    // };
   }
 
   static Map<String, String> _headers2() {
@@ -62,13 +66,10 @@ class ApiService {
   }
 
   // ===== Orders ===== //
-  static Future<HttpResult> getOrders(int werehouse,bool isFinished) async {
-    return await _get(
-      isFinished?
-        '/collector/order/?filter=finished&status=collected&warehouse=$werehouse':
-      '/collector/order/?status=collected&warehouse=$werehouse',
-    
-    );
+  static Future<HttpResult> getOrders(int werehouse, bool isFinished) async {
+    return await _get(isFinished
+        ? '/collector/order/?filter=finished&warehouse=$werehouse'
+        : '/collector/pos/order/?filter=unfinished&status=collected&warehouse=$werehouse');
   }
 
   // ===== Orders with id===== //
@@ -81,6 +82,11 @@ class ApiService {
     return await _post('/collector/pos/order/create/', body: body);
   }
 
+  // ===== CLOSE ORDER  ===== //
+  static Future<HttpResult> closeCheckOrder(var body, String orderId) async {
+    return await _post('/collector/order/$orderId/check/', body: body);
+  }
+
   // ===== CLOSE SESSION ===== //
   static Future<HttpResult> closeSession(
     String phone,
@@ -88,7 +94,6 @@ class ApiService {
     String resAmound,
     String finishedAmound,
     int posdesk,
-
   ) async {
     var body = {
       "phone": phone,
@@ -102,13 +107,21 @@ class ApiService {
   }
 
   static Future<HttpResult> searchProducts(String text) async {
-    // return await _get('/invan/get-by-barcode/$barcode');
-    return await _get("/collector/product/?q=$text");
+    // return await _get("/collector/product/?q=$text");
+    String branch = AppPrefs.getbranch.toString();
+    String werehouse = AppPrefs.getWereHouse.toString();
+    return await _get(
+      "/collector/product/available/?branch=$branch&product_name=$text&warehouse=$werehouse",
+      // "https://api.bir-qadam.thinkland.uz/api/pos/product/available/barcode/4780012872395/?cash_desk_id=2"
+    );
   }
 
-  static Future<HttpResult> getProductWithBarcode(String text) async {
-    return await _get("/collector/product/?barcode=$text");
+  static Future<HttpResult> searchFromPistolProducts(String text) async {
+    String posDesk = AppPrefs.getPosDesk.toString();
+    return await _get(
+        "/pos/product/available/barcode/$text/?cash_desk_id=$posDesk");
   }
+
 
   // ===== AUTH ===== //
   static Future<HttpResult> login(String phone) async {
@@ -199,8 +212,6 @@ class ApiService {
             headers: isSecondHeader == true ? _headers2() : _headers(),
           )
           .timeout(const Duration(seconds: 30));
-      print(response.statusCode);
-      print(response.body);
       HttpInspector.onResponse(response);
       var decoded = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {

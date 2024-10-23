@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:bir_qadam_pos/core/components/app_packages.dart';
-
 import '../core/core.dart';
 import '../models/models.dart';
 // ignore: depend_on_referenced_packages
@@ -14,9 +13,7 @@ class HttpInspector {
     if (kDebugMode) {
       // var decoded = jsonDecode(response.body);
       // String str = const JsonEncoder.withIndent(' ').convert(decoded);
-
       // str.printf(name: 'HttpInspector');
-
       // _alice.onHttpResponse(response);
       // _responses.add(AppHttpResponse.fromResponse(response));
       // _streamController.sink.add(_responses);

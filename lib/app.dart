@@ -1,10 +1,11 @@
 import 'package:bir_qadam_pos/bloc/bloc.dart';
-import 'package:bir_qadam_pos/hive_helper/hive_prefs.dart';
+import 'package:bir_qadam_pos/screens/auth_screen/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'bloc/searching/bloc.dart';
 import 'core/core.dart';
+import 'hive_helper/hive_helper.dart';
 import 'provider/ordering_provider.dart';
-import 'screens/auth_screen/auth_screen.dart';
 import 'screens/home/home_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -26,9 +27,11 @@ class MyApp extends StatelessWidget {
                     BlocProvider(create: (_) => GetWerehouseBloc()),
                     BlocProvider(create: (_) => GetOrdersBloc()),
                     BlocProvider(create: (_) => CloseOrderBloc()),
-                    BlocProvider(create: (_) => GetOrdersWithIdBloc()),
+                    BlocProvider(create: (_) => GetOrdersWithIdBloc(context)),
                     BlocProvider(create: (_) => ClientBloc({}, 1, 1)),
-                    BlocProvider(create: (_) => AddSearchingProductsBloc()),
+                    BlocProvider(create: (_) => SearchingBloc()),
+                    BlocProvider(create: (_) => BarcodeBloc()),
+                    // BlocProvider(create: (_) => AddSearchingProductsBloc()),
                   ],
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
@@ -39,15 +42,18 @@ class MyApp extends StatelessWidget {
                     // locale: context.locale,
                     // navigatorKey: AppNavigator.navigatorKey,
                     // initialRoute: getInitialRoute(),
-                    // onGenerateRoute: AppRouter.onGenerateRoute,
+                    // onGenerateRoute: AppRouter.onGenerateRoute,w
                     // builder: (context, child) => MediaQuery(
                     //   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                     //   child: child ?? const SizedBox(),
                     // ),
                     // home: const LockedScreen(),
-                    home: AppPrefs.token != ""
+                    home:
+                    // HomeScreen(),
+                     AppPrefs.token != ""
                         ? const HomeScreen()
-                        : const AuthentificationScreen(),
+                        :
+                         const AuthentificationScreen(),
                   ),
                 );
               },

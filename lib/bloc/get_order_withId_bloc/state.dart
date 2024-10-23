@@ -20,4 +20,3 @@ final class GetAllOrdersWithIdFailure extends GetOrdersWithIdState {
 
 
 
-final class GetAllOrderFinished extends GetOrdersWithIdState {}

@@ -169,6 +169,16 @@ class AppPrefs {
   static String get phone => _box.get(PrefKeys.phone) ?? '';
 
   // ======================================================================= //
+    // ======================================================================= //
+
+  /// Forydalanuvchining parolini  saqlash uchun
+  static Future setPass(String password) async {
+    await _box.put(PrefKeys.password, password);
+  }
+
+  static String get password => _box.get(PrefKeys.password) ?? '';
+
+  // ======================================================================= //
 
   /// PrefBox'dagi berilgan key'dagilarni o'chiradi.
   static Future clearBox() async {
@@ -181,6 +191,8 @@ class AppPrefs {
       PrefKeys.werehouse,
       PrefKeys.branch,
       PrefKeys.phone,
+      PrefKeys.password,
+
 
       PrefKeys.notification,
       PrefKeys.user,
@@ -205,6 +217,8 @@ class PrefKeys {
   static const String branch = 'branch';
 
   static const String user = 'user';
+  static const String password = 'password';
+
   static const String counter = 'counter';
   static const String pin = 'pin';
   static const String posdesk = 'basket_id';

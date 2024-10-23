@@ -1,11 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:bir_qadam_pos/core/core.dart';
 import 'package:bir_qadam_pos/models/product/product_model.dart';
 import '../../../../hive_helper/product_helper.dart';
 import '../../../widgets/widgets.dart';
 import 'product_search_item.dart';
+
 class ProductSearchDelegate extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -64,7 +63,6 @@ class ProductSearchDelegate extends SearchDelegate {
     // return query.isNotEmpty ? _searchProducts() : _showHistory();
     // return _searchProducts();
     return query.isNotEmpty ? _searchProducts() : const SizedBox();
-
   }
 
   FutureBuilder<List<ProductModel>> _searchProducts() {
@@ -74,7 +72,10 @@ class ProductSearchDelegate extends SearchDelegate {
       builder: (context, snap) {
         if (snap.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
+            child: CircularProgressIndicator(
+              color: AppColors.primary,
+              strokeWidth: 1,
+            ),
           );
         }
         if (snap.hasData) {
@@ -85,8 +86,6 @@ class ProductSearchDelegate extends SearchDelegate {
       },
     );
   }
-
-  
 
   Widget _showList() {
     if (_products.isEmpty) {

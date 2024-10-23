@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bir_qadam_pos/core/core.dart';
 import 'package:bir_qadam_pos/models/product/product_model.dart';
-
-import '../../../../bloc/bloc.dart';
+import 'package:provider/provider.dart';
+import '../../../../provider/ordering_provider.dart';
 import '../../../widgets/widgets.dart';
 
 // ignore: must_be_immutable
@@ -20,7 +20,8 @@ class ProductSearchItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.fromLTRB(12.w, 8.h, isHistory ? 0 : 12.w, 8.h),
+      splashColor: AppColors.white,
+      contentPadding: EdgeInsets.fromLTRB(12.w, 1.h, isHistory ? 0 : 12.w, 1.h),
       tileColor: AppColors.white,
       // leading: AppImage(
       //   height: 56.h,
@@ -35,15 +36,45 @@ class ProductSearchItem extends StatelessWidget {
         ItemModel item = ItemModel(
           product: product,
           actualPrice: product.regularPrice,
-          actualQuantity: "1",
+          actualQuantity: product.quantityAvailable,
           price: product.regularPrice,
           productVariant: ProductVariant(),
           quantity: "1",
+          currentValue: 1,
         );
-
-        BlocProvider.of<AddSearchingProductsBloc>(context)
-            .add(GetSearchedProductWithWord(item: item));
-        Navigator.pop(context);
+        Provider.of<OrderingProvider>(context, listen: false).addProduct(
+          item: item,
+        ); // if (product.productVariants == null ||
+        //     product.productVariants!.isEmpty) {
+        //   if (double.parse(product.quantityAvailable ?? "0") > 0) {
+        //     ItemModel item = ItemModel(
+        //       product: product,
+        //       actualPrice: product.regularPrice,
+        //       actualQuantity: product.quantityAvailable,
+        //       price: product.regularPrice,
+        //       productVariant: ProductVariant(),
+        //       quantity: "1",
+        //       currentValue: 1,
+        //     );
+        //     Provider.of<OrderingProvider>(context, listen: false).addProduct(
+        //       item: item,
+        //     );
+        //     // BlocProvider.of<AddSearchingProductsBloc>(context)
+        //     //     .add(GetSearchedProductWithWord(item: item));
+        //     Navigator.pop(context);
+        //   } else {
+        //     Fluttertoast.showToast(
+        //         msg: "Siz tanlagan afsuski yetarli emas",
+        //         toastLength: Toast.LENGTH_SHORT,
+        //         gravity: ToastGravity.CENTER,
+        //         timeInSecForIosWeb: 1,
+        //         textColor: Colors.white,
+        //         fontSize: 16.0);
+        //   }
+        // } else {
+        //   AppDialog dialog = AppDialog(context);
+        //   dialog.selectProductVariant(product);
+        // }
       },
     );
   }
@@ -75,22 +106,17 @@ class ProductSearchItem extends StatelessWidget {
       size: 14,
       color: AppColors.dark,
     );
-
     String source = product.name ?? "";
-
     if (!source.toLowerCase().contains(query.toLowerCase())) {
       return [
         TextSpan(text: source, style: simpleStyle),
       ];
     }
     final matches = query.toLowerCase().allMatches(source.toLowerCase());
-
     int lastMatchEnd = 0;
-
     final List<TextSpan> children = [];
     for (var i = 0; i < matches.length; i++) {
       final match = matches.elementAt(i);
-
       if (match.start != lastMatchEnd) {
         children.add(
           TextSpan(
@@ -99,7 +125,6 @@ class ProductSearchItem extends StatelessWidget {
           ),
         );
       }
-
       children.add(
         TextSpan(
           text: source.substring(match.start, match.end),
