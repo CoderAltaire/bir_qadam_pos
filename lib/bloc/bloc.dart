@@ -9,3 +9,4 @@ export 'client_bloc/bloc.dart';
 export 'flash_bloc/bloc.dart';
 export 'barcode_bloc/barcode_bloc.dart';
 export 'add_searched_bloc/add_searching_products_bloc.dart';
+export 'pos_desk/bloc.dart';

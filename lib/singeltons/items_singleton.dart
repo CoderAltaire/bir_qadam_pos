@@ -6,9 +6,6 @@ class ItemsSingleton {
 
     double t = 0;
     for (var e in products) {
-    print("!!!!");
-    print(e.currentValue);
-    print(e.price);
       t += double.parse(e.product?.regularPrice??"") * (e.currentValue ?? 1);
     }
     return t;

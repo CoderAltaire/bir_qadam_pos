@@ -10,7 +10,7 @@ class ApiService {
   const ApiService._();
   static const String _baseUrl = "https://api.bir-qadam.thinkland.uz/api";
   static Map<String, String> _headers() {
-    String token = AppPrefs.token;
+    // String token = AppPrefs.token;
     return {
       "Content-Type": "application/json",
       "Authorization": 'Basic Kzk5ODIwMTIzNDU2NzoxMjM0NTY3OA=='
@@ -58,10 +58,17 @@ class ApiService {
     );
   }
 
-  // ===== Werehouse ===== //
-  static Future<HttpResult> getWerehouse(int werehouseId) async {
+  static Future<HttpResult> getPosDesk() async {
+    String werehouse = AppPrefs.getWereHouse.toString();
     return await _get(
-      '/collector/warehouse/?branch=$werehouseId',
+      '/pos/cash-desk/?page=1&page_size=10000&warehouse=$werehouse&is_active=true',
+    );
+  }
+
+  // ===== Werehouse ===== //
+  static Future<HttpResult> getWerehouse(int branchId) async {
+    return await _get(
+      "/collector/warehouse/?branch=$branchId&is_active=true",
     );
   }
 
@@ -74,6 +81,7 @@ class ApiService {
 
   // ===== Orders with id===== //
   static Future<HttpResult> getOrdersWithId(String id) async {
+    print(id);
     return await _get('/collector/order/$id/');
   }
 
@@ -88,13 +96,8 @@ class ApiService {
   }
 
   // ===== CLOSE SESSION ===== //
-  static Future<HttpResult> closeSession(
-    String phone,
-    String password,
-    String resAmound,
-    String finishedAmound,
-    int posdesk,
-  ) async {
+  static Future<HttpResult> closeSession(String phone, String password,
+      String resAmound, String finishedAmound, int posdesk) async {
     var body = {
       "phone": phone,
       "password": password,
@@ -111,8 +114,7 @@ class ApiService {
     String branch = AppPrefs.getbranch.toString();
     String werehouse = AppPrefs.getWereHouse.toString();
     return await _get(
-      "/collector/product/available/?branch=$branch&product_name=$text&warehouse=$werehouse",
-      // "https://api.bir-qadam.thinkland.uz/api/pos/product/available/barcode/4780012872395/?cash_desk_id=2"
+      "/collector/product-available/?branch=$branch&product_name=$text&warehouse=$werehouse",
     );
   }
 
@@ -122,61 +124,10 @@ class ApiService {
         "/pos/product/available/barcode/$text/?cash_desk_id=$posDesk");
   }
 
-
   // ===== AUTH ===== //
   static Future<HttpResult> login(String phone) async {
     var body = {"phone_number": phone};
     return await _post('/auth/login', body: body);
-  }
-
-  static Future<HttpResult> productList({int page = 1}) async {
-    int time = AppPrefs.lastUpdageTimeProducts;
-    return await _get('/goods/time/$time?limit=500&page=$page');
-  }
-
-  static Future<HttpResult> getMinCost() async {
-    String path = "/setting";
-    return await _get(path);
-  }
-
-// FIND PROMOCODE
-  static Future<HttpResult> findPromocode(String promocode) async {
-    String path = '/promocode/find-name';
-    var body = {"name": promocode};
-    return _post(
-      path,
-      body: body,
-    );
-  }
-
-  ///////
-  static Future<HttpResult> historyOrder() async {
-    // String url = "/order/get-mine";
-    // var body = {
-    //   "limit": 100,
-    //   "page": page,
-    //   "search": "",
-    // };
-    // return await _post(
-    //   url,
-    //   body: body,
-    // );
-    String url = "/orders";
-    return await _get(url);
-  }
-
-///////
-  static Future<HttpResult> cancelOrder(
-    String id,
-  ) async {
-    String url = "/order/client/cancel";
-    var body = {
-      "order_id": id,
-    };
-    return await _post(
-      url,
-      body: body,
-    );
   }
 
 ////-*-*-*-*-*-*-*-*-*-*-*Address to Location
@@ -246,9 +197,7 @@ class ApiService {
     String path,
   ) async {
     Uri url;
-
     url = Uri.parse('$_baseUrl$path');
-
     try {
       http.Response response = await http
           .get(
@@ -256,6 +205,7 @@ class ApiService {
             headers: _headers(),
           )
           .timeout(const Duration(seconds: 30));
+
       HttpInspector.onResponse(response);
 
       var decoded = json.decode(utf8.decode(response.bodyBytes));

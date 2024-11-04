@@ -6,3 +6,4 @@ export 'werehouse/werehouse_model.dart';
 export 'orders/orders_model.dart';
 export 'created_order/created_order_model.dart';
 export 'product/product_model.dart';
+export 'pos_desk/pos_desk_model.dart';

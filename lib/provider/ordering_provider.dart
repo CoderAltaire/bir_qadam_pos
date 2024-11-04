@@ -17,18 +17,24 @@ class OrderingProvider extends ChangeNotifier {
   );
   int i = 0;
   void addClient() {
+    print("qq");
+    print(_currentClient.clientNumber);
+    _clearEmptyClients();
+
     i++;
-    if (_currentClient.orderedProducts.isNotEmpty) {
-      _clientNumber++;
+    if (_currentClient.orderedProducts.isNotEmpty ||
+        _currentClient.clientNumber == 1) {
+      // _clientNumber == 1 ? _clientNumber : _clientNumber++;
       final sixClientModel = SixClientModel4(
         clientNumber: _clientNumber,
         orderId: "",
         lastAddedIndex: -1,
         orderedProducts: [],
       );
-      if (_sixClient4List.isEmpty) {
-        _sixClient4List.add(_currentClient);
-      }
+      _clientNumber++;
+      // if (_sixClient4List.isEmpty) {
+      //   _sixClient4List.add(_currentClient);
+      // }
 
       _sixClient4List.add(sixClientModel);
       _currentClient = _sixClient4List.last;
@@ -46,13 +52,16 @@ class OrderingProvider extends ChangeNotifier {
   }
 
   void _clearEmptyClients() {
-    List<int> clientNumbers = [];
-    for (int i = 0; i < _sixClient4List.length; i++) {
-      if (_sixClient4List[i].orderedProducts.isEmpty) {
-        clientNumbers.add(_sixClient4List[i].clientNumber);
-      }
-    }
+    // List<int> clientNumbers = [];
+    // for (int i = 0; i < _sixClient4List.length; i++) {
+    //   if (_sixClient4List[i].orderedProducts.isEmpty) {
+    //     clientNumbers.add(_sixClient4List[i].clientNumber);
+    //   }
+    // }
     _sixClient4List.removeWhere((e) => e.orderedProducts.isEmpty);
+    if (_sixClient4List.isEmpty) {
+      _clientNumber = 1;
+    }
   }
 
   void _paymentOnClients() {
@@ -87,25 +96,66 @@ class OrderingProvider extends ChangeNotifier {
     _currentClient.orderedProducts = [];
     _currentClient.lastAddedIndex = -1;
     _currentClient.orderId = "";
+    _clearEmptyClients();
+    //  _index = 0;
+    if (_sixClient4List.isNotEmpty) {
+      int scIndex = _sixClient4List.first.clientNumber - 1;
 
+      selectClient(scIndex);
+    }
     notifyListeners();
     return true;
   }
 
   addProduct({required ItemModel item}) {
-    if (_currentClient.orderedProducts.any((e) => (e.id) == (item.id))) {
-      int i = _currentClient.orderedProducts.indexWhere(
-        (e) => e.product?.id == item.product?.id,
-      );
-      ItemModel soldItem = _currentClient.orderedProducts[i];
-      int value = 1;
-      int v = (soldItem.currentValue ?? 1);
-      v += value;
-      soldItem.currentValue = v;
-      _currentClient.orderedProducts.removeAt(i);
-      _currentClient.orderedProducts.insert(0, soldItem);
+    // if (_currentClient.orderedProducts.any((e) => (e.id) == (item.id))) {
+    //   int i = _currentClient.orderedProducts.indexWhere(
+    //     (e) => e.product?.id == item.product?.id,
+    //   );
+    //   ItemModel soldItem = _currentClient.orderedProducts[i];
+    //   int value = 1;
+    //   int v = (soldItem.currentValue ?? 1);
+    //   v += value;
+    //   soldItem.currentValue = v;
+    //   _currentClient.orderedProducts.removeAt(i);
+    //   _currentClient.orderedProducts.insert(0, soldItem);
+    // } else {
+    //   _currentClient.orderedProducts.insert(0, item);
+    // }
+    // notifyListeners();
+    if (item.productVariant?.id != null) {
+      if (_currentClient.orderedProducts
+          .any((e) => e.productVariant?.id == item.productVariant?.id)) {
+        int i = _currentClient.orderedProducts.indexWhere(
+          (e) => e.product?.id == item.product?.id,
+        );
+        ItemModel soldItem = _currentClient.orderedProducts[i];
+        int value = 1;
+        int v = (soldItem.currentValue ?? 1);
+        v += value;
+        soldItem.currentValue = v;
+        _currentClient.orderedProducts.removeAt(i);
+        _currentClient.orderedProducts.insert(0, soldItem);
+      } else {
+        _currentClient.orderedProducts.insert(0, item);
+      }
     } else {
-      _currentClient.orderedProducts.insert(0, item);
+      if (_currentClient.orderedProducts.any((e) {
+        return e.id == item.id;
+      })) {
+        int i = _currentClient.orderedProducts.indexWhere(
+          (e) => e.product?.id == item.product?.id,
+        );
+        ItemModel soldItem = _currentClient.orderedProducts[i];
+        int value = 1;
+        int v = (soldItem.currentValue ?? 1);
+        v += value;
+        soldItem.currentValue = v;
+        _currentClient.orderedProducts.removeAt(i);
+        _currentClient.orderedProducts.insert(0, soldItem);
+      } else {
+        _currentClient.orderedProducts.insert(0, item);
+      }
     }
     notifyListeners();
   }

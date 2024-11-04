@@ -65,6 +65,10 @@ class _ClientsPartState extends State<ClientsPart> {
                           isSelected: selectedClientIndex == index,
                           clientNumber: client.clientNumber,
                           onPressed: () {
+                            print("XX");
+                            print(index);
+                            print("XXx");
+
                             orderingProvider.selectClient(index);
                           },
                         );

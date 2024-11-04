@@ -73,51 +73,27 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
               if (state is BarcodeSuccessState) {
                 ItemModel item = ItemModel();
                 if (state.products.length == 1) {
-                  if (double.parse(
-                          state.products.first.quantityAvailable ?? "0") >
-                      0) {
-                    item = ItemModel(
-                      product: state.products.first,
-                      actualPrice: state.products.first.regularPrice,
-                      actualQuantity: state.products.first.quantityAvailable,
-                      price: state.products.first.regularPrice,
-                      productVariant: ProductVariant(),
-                      quantity: "1",
-                      currentValue: 1,
-                    );
-                    Provider.of<OrderingProvider>(context, listen: false)
-                        .addProduct(
-                      item: item,
-                    );
-                    // BlocProvider.of<AddSearchingProductsBloc>(context)
-                    //     .add(GetSearchedProductWithWord(item: item));
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: "Siz tanlagan afsuski yetarli emas",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                  }
+                  item = ItemModel(
+                    id: state.products.first.id,
+                    product: state.products.first,
+                    actualPrice: state.products.first.regularPrice,
+                    actualQuantity: state.products.first.quantityAvailable,
+                    price: state.products.first.regularPrice,
+                    productVariant: state.products.first.productVariants,
+                    quantity: "1",
+                    currentValue: 1,
+                  );
+                  Provider.of<OrderingProvider>(context, listen: false)
+                      .addProduct(
+                    item: item,
+                  );
+                   Navigator.pop(context);
                 } else {
                   AppDialog dialog = AppDialog(context);
                   dialog.selectVariantFromPistol(state.products);
                 }
 
-               
-                // Provider.of<OrderingProvider>(context, listen: false)
-                //     .addProduct(
-                //   item: item,
-                // );
-
-                // Provider.of<OrderingProvider>(context, listen: false)
-                //     .addProduct(
-                //   item: item,
-                // );
-
                 _qrViewController?.resumeCamera();
-                Navigator.pop(context);
               }
             },
             builder: (context, state) {

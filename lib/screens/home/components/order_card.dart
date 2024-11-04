@@ -2,6 +2,7 @@ import 'package:bir_qadam_pos/core/core.dart';
 import 'package:bir_qadam_pos/screens/home/components/empty_widget.dart';
 import 'package:bir_qadam_pos/screens/home/components/total_sum.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../bloc/bloc.dart';
 import '../../../models/models.dart';
 import '../../../provider/ordering_provider.dart';
@@ -20,12 +21,16 @@ class OrdersCardWidget extends StatefulWidget {
 class _OrdersCardWidgetState extends State<OrdersCardWidget> {
   @override
   Widget build(BuildContext context) {
+    final orderingProvider = Provider.of<OrderingProvider>(context);
+
     final List<ItemModel> orderedProducts =
         context.watch<OrderingProvider>().getCurrentClient.orderedProducts;
     return Expanded(
       child: BlocConsumer<GetOrdersWithIdBloc, GetOrdersWithIdState>(
         listener: (context, state) {
-          if (state is GetAllOrdersWithIdSuccess) {}
+          if (state is GetAllOrdersWithIdSuccess) {
+            // orderingProvider.addClient();
+          }
           if (state is GetAllOrdersWithIdFailure) {
             Fluttertoast.showToast(
                 msg: state.msg,
@@ -63,8 +68,7 @@ class _OrdersCardWidgetState extends State<OrdersCardWidget> {
                                   itemCount: orderedProducts.length,
                                   itemBuilder: (context, index) {
                                     return ProductCard(
-                                      items: orderedProducts[index],
-                                    );
+                                        items: orderedProducts[index]);
                                   }),
                             ),
                           ],

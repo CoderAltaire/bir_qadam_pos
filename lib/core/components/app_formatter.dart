@@ -110,7 +110,6 @@ class AppFormatter {
 
   static String cardNubderFormat(String number) {
     String cardNum = number.replaceRange(6, 12, '*****');
-
     return cardNum;
   }
 

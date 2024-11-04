@@ -77,7 +77,6 @@ class ConfirmButtons extends StatelessWidget {
                         receivedFromCard: "0",
                         items: items,
                       );
-                      print(order.toJson());
                       BlocProvider.of<CloseOrderBloc>(context).add(
                           StartCloseOrderEvent(
                               order, orderId == "" ? true : false, orderId));

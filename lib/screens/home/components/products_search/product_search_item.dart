@@ -35,46 +35,18 @@ class ProductSearchItem extends StatelessWidget {
       onTap: () {
         ItemModel item = ItemModel(
           product: product,
+          id: product.id,
           actualPrice: product.regularPrice,
           actualQuantity: product.quantityAvailable,
           price: product.regularPrice,
-          productVariant: ProductVariant(),
+          productVariant: product.productVariants,
           quantity: "1",
           currentValue: 1,
         );
         Provider.of<OrderingProvider>(context, listen: false).addProduct(
           item: item,
-        ); // if (product.productVariants == null ||
-        //     product.productVariants!.isEmpty) {
-        //   if (double.parse(product.quantityAvailable ?? "0") > 0) {
-        //     ItemModel item = ItemModel(
-        //       product: product,
-        //       actualPrice: product.regularPrice,
-        //       actualQuantity: product.quantityAvailable,
-        //       price: product.regularPrice,
-        //       productVariant: ProductVariant(),
-        //       quantity: "1",
-        //       currentValue: 1,
-        //     );
-        //     Provider.of<OrderingProvider>(context, listen: false).addProduct(
-        //       item: item,
-        //     );
-        //     // BlocProvider.of<AddSearchingProductsBloc>(context)
-        //     //     .add(GetSearchedProductWithWord(item: item));
-        //     Navigator.pop(context);
-        //   } else {
-        //     Fluttertoast.showToast(
-        //         msg: "Siz tanlagan afsuski yetarli emas",
-        //         toastLength: Toast.LENGTH_SHORT,
-        //         gravity: ToastGravity.CENTER,
-        //         timeInSecForIosWeb: 1,
-        //         textColor: Colors.white,
-        //         fontSize: 16.0);
-        //   }
-        // } else {
-        //   AppDialog dialog = AppDialog(context);
-        //   dialog.selectProductVariant(product);
-        // }
+        );
+        Navigator.pop(context);
       },
     );
   }
@@ -106,7 +78,7 @@ class ProductSearchItem extends StatelessWidget {
       size: 14,
       color: AppColors.dark,
     );
-    String source = product.name ?? "";
+    String source = product.productVariants?.name ?? product.name ?? "";
     if (!source.toLowerCase().contains(query.toLowerCase())) {
       return [
         TextSpan(text: source, style: simpleStyle),

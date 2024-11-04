@@ -14,6 +14,10 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final String orderId =
         context.watch<OrderingProvider>().getCurrentClient.orderId ?? "";
+
+    final SixClientModel4 cc =
+        context.watch<OrderingProvider>().getCurrentClient;
+    print(cc.clientNumber);
     return SizedBox(
       // color: Colors.amber,
       height: MediaQuery.of(context).size.height * 0.12,
@@ -27,7 +31,8 @@ class HomeAppBar extends StatelessWidget {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    state is GetAllOrdersWithIdSuccess
+                    // state is GetAllOrdersWithIdSuccess
+                    cc.clientNumber!=0
                         ? SizedBox(
                             height: MediaQuery.of(context).size.height * 0.039,
                             child: IconButton(

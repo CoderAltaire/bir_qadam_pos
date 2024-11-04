@@ -15,17 +15,9 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-  ItemModel item = ItemModel();
   @override
   Widget build(BuildContext context) {
-    final List<ItemModel> orderedProducts =
-        context.watch<OrderingProvider>().getCurrentClient.orderedProducts;
-    item = orderedProducts.where((e) {
-      return (e.id ?? "") == (widget.items.id ?? "");
-    }).first;
-
     final orderingProvider = Provider.of<OrderingProvider>(context);
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.sp),
       child: Container(
@@ -46,7 +38,9 @@ class _ProductCardState extends State<ProductCard> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.72,
                     child: Text(
-                      item.productVariant?.name ?? item.product?.name ?? "XXX",
+                      widget.items.productVariant?.name ??
+                          widget.items.product?.name ??
+                          "XXX",
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
                       maxLines: 2,
@@ -76,8 +70,11 @@ class _ProductCardState extends State<ProductCard> {
                   Padding(
                     padding: EdgeInsets.only(right: 15.sp),
                     child: Text(
-                      AppFormatter.rounderFromString(
-                          item.product?.quantityAvailable ?? item.quantity),
+                      widget.items.product?.quantityAvailable == null
+                          ? AppFormatter.rounderFromString(
+                              widget.items.product?.quantityAvailable)
+                          : AppFormatter.rounderFromString(
+                              widget.items.quantity),
                       style: AppTextStyle.semiBold(size: 16),
                     ),
                   ),
@@ -86,7 +83,7 @@ class _ProductCardState extends State<ProductCard> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.sp),
                 child: Text(
-                  "${MoneyFormatter.formatter.format(((double.parse(item.product?.regularPrice ?? "0")) * (item.currentValue ?? (1)).toDouble()))}so`m",
+                  "${MoneyFormatter.formatter.format(((double.parse(widget.items.product?.regularPrice ?? "0")) * (widget.items.currentValue ?? (1)).toDouble()))}so`m",
                   style:
                       AppTextStyle.medium(size: 17, color: AppColors.primary),
                 ),
@@ -109,9 +106,9 @@ class _ProductCardState extends State<ProductCard> {
                           borderRadius: BorderRadius.circular(8.r),
                           onTap: () {
                             setState(() {});
-                            if ((item.currentValue ?? 1) > 1) {
+                            if ((widget.items.currentValue ?? 1) > 1) {
                               // item.currentValue = (item.currentValue ?? 1) - 1;
-                              orderingProvider.minusProduct(item: item);
+                              orderingProvider.minusProduct(item: widget.items);
                             }
                           },
                           child: Container(
@@ -125,7 +122,7 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                       ),
                       Text(
-                        (item.currentValue ?? 1).toString(),
+                        (widget.items.currentValue ?? 1).toString(),
                         style: AppTextStyle.medium(
                           size: 16,
                         ),
@@ -136,13 +133,13 @@ class _ProductCardState extends State<ProductCard> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(8.r),
                           onTap: () {
-                            if ((item.currentValue ?? 1) <
-                                (double.parse(item.actualQuantity ??
-                                    item.quantity ??
+                            if ((widget.items.currentValue ?? 1) <
+                                (double.parse(widget.items.actualQuantity ??
+                                    widget.items.quantity ??
                                     "1"))) {
                               setState(() {});
                               // item.currentValue = (item.currentValue ?? 1) + 1;
-                              orderingProvider.addProduct(item: item);
+                              orderingProvider.addProduct(item: widget.items);
                             }
                           },
                           child: Container(

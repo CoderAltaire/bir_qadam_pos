@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
                     BlocProvider(create: (_) => CloseSessionBloc()),
                     BlocProvider(create: (_) => GetBranchBloc()),
                     BlocProvider(create: (_) => GetWerehouseBloc()),
+                    BlocProvider(create: (_) => PosDeskBloc()),
                     BlocProvider(create: (_) => GetOrdersBloc()),
                     BlocProvider(create: (_) => CloseOrderBloc()),
                     BlocProvider(create: (_) => GetOrdersWithIdBloc(context)),
@@ -49,11 +50,10 @@ class MyApp extends StatelessWidget {
                     // ),
                     // home: const LockedScreen(),
                     home:
-                    // HomeScreen(),
-                     AppPrefs.token != ""
-                        ? const HomeScreen()
-                        :
-                         const AuthentificationScreen(),
+                        // HomeScreen(),
+                        AppPrefs.token != ""
+                            ? const HomeScreen()
+                            : const AuthentificationScreen(),
                   ),
                 );
               },

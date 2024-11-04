@@ -187,8 +187,8 @@ class ProductModel extends HiveObject {
   bool? isMobileVisible;
   @HiveField(28)
   CategoryModel? category;
-  @HiveField(29)
-  String? trademark;
+  // @HiveField(29)
+  // String? trademark;
   @HiveField(30)
   int? unitTypeValue;
   @HiveField(31)
@@ -245,7 +245,7 @@ class ProductModel extends HiveObject {
     this.isPieces,
     this.isMobileVisible,
     this.category,
-    this.trademark,
+    // this.trademark,
     this.unitTypeValue,
     this.measureSizeValue,
     this.measureValue,
@@ -296,7 +296,7 @@ class ProductModel extends HiveObject {
     category = json['category'] != null
         ? CategoryModel.fromJson(json['category'])
         : null;
-    trademark = json['trademark'];
+    // trademark = json['trademark'];
     unitTypeValue = json['unit_type_value'];
     measureSizeValue = json['measure_size_value'];
     measureValue = json['measure_value'];
@@ -324,7 +324,7 @@ class ProductModel extends HiveObject {
         ? ProductVariant.fromJson(json['product_variant'])
         : null;
     nameUz = json['product_name_uz'];
-    quantityAvailable = json['quantity_available'];
+    quantityAvailable = json['quantity_available'].toString();
     nameEn = json['product_name_en'];
     orderingNumber = json['ordering_number'];
     ikpu = json['ikpu'];
@@ -357,7 +357,7 @@ class ProductModel extends HiveObject {
     category = json['category'] != null
         ? CategoryModel.fromJson(json['category'])
         : null;
-    trademark = json['trademark'];
+    // trademark = json['trademark'];
     unitTypeValue = json['unit_type_value'];
     measureSizeValue = json['measure_size_value'];
     measureValue = json['measure_value'];
@@ -408,7 +408,7 @@ class ProductModel extends HiveObject {
     if (category != null) {
       data['category'] = category!.toJson();
     }
-    data['trademark'] = trademark;
+    // data['trademark'] = trademark;
     data['unit_type_value'] = unitTypeValue;
     data['measure_size_value'] = measureSizeValue;
     data['measure_value'] = measureValue;

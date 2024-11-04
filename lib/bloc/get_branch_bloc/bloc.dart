@@ -16,7 +16,6 @@ class GetBranchBloc extends Bloc<GetBranchEvent, GetBranchState> {
   ) async {
     emit(GetAllBranchProccess());
     HttpResult result = await ApiService.getBranch();
-
     if (result.isSuccess) {
       List<BranchModel> branches = (result.result['results'] as List)
           .map((e) => BranchModel.fromJson(e))

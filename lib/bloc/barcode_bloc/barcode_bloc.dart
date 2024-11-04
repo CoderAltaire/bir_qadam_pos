@@ -16,9 +16,11 @@ class BarcodeBloc extends Bloc<BarcodeEvent, BarcodeState> {
     emit(BarcodeLoadingState());
     HttpResult result =
         await ApiService.searchFromPistolProducts(event.barcode);
+
     if (result.isSuccess) {
-      List<ProductModel> products =
-          (result.result as List).map((e) => ProductModel.fromJson(e)).toList();
+      List<ProductModel> products = (result.result as List)
+          .map((e) => ProductModel.fromSearchedJson(e))
+          .toList();
       if (products.isNotEmpty) {
         emit(BarcodeSuccessState(products));
       } else {

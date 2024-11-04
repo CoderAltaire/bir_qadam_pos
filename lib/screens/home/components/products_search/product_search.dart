@@ -9,23 +9,24 @@ class ProductSearchDelegate extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
+      scaffoldBackgroundColor: AppColors.white,
       platform: TargetPlatform.iOS,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.primary,
-        iconTheme: IconThemeData(color: Colors.white, size: 18),
+        backgroundColor: AppColors.white,
+        iconTheme: IconThemeData(color: AppColors.dark, size: 18),
       ),
       textSelectionTheme: const TextSelectionThemeData(
-        cursorColor: AppColors.white,
+        cursorColor: AppColors.dark,
       ),
       textTheme: TextTheme(
-        titleLarge: AppTextStyle.medium(color: AppColors.white),
+        titleLarge: AppTextStyle.medium(color: AppColors.dark),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: AppTextStyle.medium(color: AppColors.white),
+        hintStyle: AppTextStyle.medium(color: AppColors.dark),
         border: InputBorder.none,
-        iconColor: Colors.white,
+        iconColor: Colors.black,
         helperStyle: AppTextStyle.regular(
-          color: AppColors.white.withOpacity(.8),
+          color: AppColors.dark.withOpacity(.8),
         ),
       ),
     );
@@ -37,6 +38,7 @@ class ProductSearchDelegate extends SearchDelegate {
       AppIconButton(
           icon: AppIcons.clear,
           iconSize: 16,
+          iconColor: AppColors.dark,
           onPressed: () {
             if (query.isEmpty) {
               Navigator.pop(context);
@@ -62,7 +64,9 @@ class ProductSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     // return query.isNotEmpty ? _searchProducts() : _showHistory();
     // return _searchProducts();
-    return query.isNotEmpty ? _searchProducts() : const SizedBox();
+    return query.isNotEmpty
+        ? _searchProducts()
+        : Container(height: 1, color: Colors.black);
   }
 
   FutureBuilder<List<ProductModel>> _searchProducts() {

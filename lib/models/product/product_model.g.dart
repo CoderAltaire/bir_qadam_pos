@@ -47,7 +47,6 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       isPieces: fields[26] as bool?,
       isMobileVisible: fields[27] as bool?,
       category: fields[28] as CategoryModel?,
-      trademark: fields[29] as String?,
       unitTypeValue: fields[30] as int?,
       measureSizeValue: fields[31] as String?,
       measureValue: fields[32] as int?,
@@ -65,7 +64,7 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
   @override
   void write(BinaryWriter writer, ProductModel obj) {
     writer
-      ..writeByte(42)
+      ..writeByte(41)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -124,8 +123,6 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       ..write(obj.isMobileVisible)
       ..writeByte(28)
       ..write(obj.category)
-      ..writeByte(29)
-      ..write(obj.trademark)
       ..writeByte(30)
       ..write(obj.unitTypeValue)
       ..writeByte(31)

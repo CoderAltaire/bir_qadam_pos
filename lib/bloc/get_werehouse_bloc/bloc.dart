@@ -16,7 +16,6 @@ class GetWerehouseBloc extends Bloc<GetWerehouseEvent, GetWerehouseState> {
   ) async {
     emit(GetAllWerehouseProccess());
     HttpResult result = await ApiService.getWerehouse(event.wereHouseId);
-    
     if (result.isSuccess) {
       List<WerehouseModel> werehousees = (result.result['results'] as List)
         .map((e) => WerehouseModel.fromJson(e))

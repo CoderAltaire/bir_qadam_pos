@@ -56,7 +56,6 @@ class HomeSearchPart extends StatelessWidget {
                         BarcodeScanningService.scanBarcode(context);
                       } else {
                         // BarcodeScanningService.scanBarcode(context);
-
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return const BarcodeScanPage();

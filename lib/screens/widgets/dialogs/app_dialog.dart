@@ -431,7 +431,7 @@ class AppDialog {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.sp),
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.5,
             child: AlertDialog(
               titlePadding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w),
@@ -459,6 +459,7 @@ class AppDialog {
                 ],
               ),
               content: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -470,10 +471,11 @@ class AppDialog {
                             onTap: () {
                               ItemModel item = ItemModel(
                                 product: e,
+                                id: e.id,
                                 actualPrice: e.regularPrice,
                                 actualQuantity: e.quantityAvailable,
                                 price: e.regularPrice,
-                                productVariant: ProductVariant(),
+                                productVariant: e.productVariants,
                                 quantity: "1",
                                 currentValue: 1,
                               );
@@ -485,6 +487,7 @@ class AppDialog {
                               // BlocProvider.of<AddSearchingProductsBloc>(context)
                               //     .add(GetSearchedProductWithWord(item: item));
                               Navigator.pop(context);
+                              Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -495,7 +498,8 @@ class AppDialog {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10.sp, vertical: 12.sp),
                                 child: Text(
-                                  e.name ?? "",
+                                  e.productVariants?.name ?? "Nomsiz",
+                                  maxLines: 1,
                                   style: AppTextStyle.regular(size: 16),
                                 ),
                               ),

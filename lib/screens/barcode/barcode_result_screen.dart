@@ -42,7 +42,6 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
             //   Provider.of<OrderingProvider>(context, listen: false).addProduct(
             //     item: item,
             //   );
-
             //   BlocProvider.of<AddSearchingProductsBloc>(context)
             //       .add(GetSearchedProductWithWord(item: item));
             //   Navigator.pop(context);
@@ -134,6 +133,7 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
                         label: "Qo`shish",
                         onPressed: () async {
                           ItemModel item = ItemModel(
+                            id: product.first.id,
                             product: product.first,
                             actualPrice: product.first.regularPrice,
                             actualQuantity: product.first.quantityAvailable,
@@ -149,7 +149,6 @@ class _BarcodeResultScreenState extends State<BarcodeResultScreen> {
                           // BlocProvider.of<AddSearchingProductsBloc>(context)
                           //     .add(GetSearchedProductWithWord(item: item));
                           if (Platform.isIOS) {
-
                             Navigator.pop(context);
                             BarcodeScanningService.scanBarcode(context)
                                 .then((value) {
